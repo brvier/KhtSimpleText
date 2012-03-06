@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=net.khertan.khtsimpletext
+Exec=/usr/local/bin/khtsimpletext_launch.py
+
