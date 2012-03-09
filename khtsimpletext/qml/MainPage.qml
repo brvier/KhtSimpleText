@@ -5,6 +5,12 @@ import Qt.labs.folderlistmodel 1.0
 Page {
     tools: commonTools
 
+    property string currentFolder;
+
+/*    function newFile(name) {
+        
+    }*/
+
     Rectangle {
         id:header
         anchors.top: parent.top
@@ -103,6 +109,7 @@ Page {
                         console.log(filePath)
                         if (folderModel.isFolder(index)) {
                             folderModel.folder  = filePath
+                            currentFolder = filePath
                         }
                         else {
                              pageStack.push(fileEditPage, { filePath: filePath });
@@ -126,13 +133,6 @@ Page {
         delegate: fileDelegate
 
     }
-
-
-
-
-
-
-
 
 
 }

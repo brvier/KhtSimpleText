@@ -3,6 +3,7 @@ import com.nokia.meego 1.0
 
 Page {
     tools: editTools
+    id: editPage
 
     property string filePath;
     property bool modified;
@@ -12,10 +13,9 @@ Page {
             console.log('FilePathChanger');
             textEditor.text = QmlFileReaderWriter.read(filePath);
             modified = false;
+            flick.returnToBounds();
             }
     }
-
-    //Component.onDestruction: {console.log('onDestruction');if (modified == true ) unsavedDialog.open(); }
     
     function exitFile() {    
         textEditor.text = '';
@@ -26,15 +26,16 @@ Page {
 
     function saveFile() {    
         QmlFileReaderWriter.write(filePath, textEditor.text);
+        modified = false;
     }
         
     QueryDialog {
-	            id:unsavedDialog
+                id:unsavedDialog
                 titleText:"Unsaved"
                 icon: Qt.resolvedUrl('../icons/khtsimpletext.png')
                 message:"Did you want to save file before closing it ?";
                 acceptButtonText: 'Save';
-                rejectButtonText: 'Cancel';
+                rejectButtonText: 'Close';
                 onRejected: { exitFile(); }
                 onAccepted: { saveFile();exitFile(); }
                 }
@@ -71,62 +72,51 @@ Page {
             font { bold: false; family: "Nokia Pure Text"; pixelSize: 16; }
             color:"#cc6633"
             text:filePath
-        }
-        
-        /*Image{
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.topMargin: 10
-            anchors.bottomMargin: 10
-            //opacity: textEditor.activeFocus ? 1.0 : 0.5
-            source:"image://theme/icon-m-framework-close-thumbnail"
-            MouseArea{
-                //id:closeVKBArea
-                anchors.fill: parent
-                //onClicked: textEditor.closeSoftwareInputPanel();
-                onClicked: { 
-                    if (!textEditor.focus) { 
-                        textEditor.forceActiveFocus();
-                        textEditor.openSoftwareInputPanel(); } 
-                    else { 
-                         textEditor.focus = false; 
-                         textEditor.closeSoftwareInputPanel();}
-                }
-            }
-        }*/
+        }        
    }
 
 
     Flickable {
          id: flick
          flickableDirection: Flickable.VerticalFlick
+         //boundsBehavior: Flickable.DragOverBounds
          anchors.top: header.bottom
          anchors.left: parent.left
-         anchors.leftMargin: 2
+         anchors.leftMargin: -2
          anchors.right: parent.right
-         anchors.rightMargin: 2
+         anchors.rightMargin: -2
          anchors.bottom: parent.bottom
-         anchors.bottomMargin: 2
+         anchors.bottomMargin: -2
+         anchors.topMargin: -2
+         clip: true
          
          contentWidth: textEditor.width
          contentHeight: textEditor.height
-         pressDelay: 100
+         pressDelay: 200
 
              TextArea {
                  id: textEditor
-                 anchors {left: parent.left; right: parent.right;}
                  height: Math.max (700, implicitHeight)
-                 width: flick.width
-	                 wrapMode: TextEdit.Wrap
+                 width: editPage.width + 4
+                 wrapMode: TextEdit.Wrap
+                 textFormat: TextEdit.PlainText
                  font { bold: false; family: "Nokia Pure Text"; pixelSize: 18;}
-                 onTextChanged: { modified = true; console.log('onTextChanged');}
+                 onTextChanged: { modified = true;}
          }
    
    
      }
     
+    Menu {
+        id: editMenu
+        visualParent: pageStack
+        MenuLayout {
+            MenuItem { text: qsTr("About"); onClicked: about.open()}
+            MenuItem { text: qsTr("Save"); onClicked: saveFile()}
+            MenuItem { text: qsTr("Preferences"); onClicked: notYetAvailableBanner.show(); }
+        }
+    }
+
     ToolBarLayout {
         id: editTools
         visible: true
@@ -134,25 +124,17 @@ Page {
             platformIconId: "toolbar-back"
             anchors.left: (parent === undefined) ? undefined : parent.left
             onClicked: {
-                   //console.log('onClicked (Back toolButton)');
                    if (modified == true ) unsavedDialog.open(); 
                    else exitFile();
                    }
         }
-        /*ToolIcon {
-                    platformIconId: "toolbar-save"
-                                anchors.left: (parent === undefined) ? undefined : parent.left
-                                            onClicked: pageStack.pop();
-          }*/
+
         ToolIcon {
             platformIconId: "toolbar-view-menu"
             anchors.right: (parent === undefined) ? undefined : parent.right
-            onClicked: (myMenu.status === DialogStatus.Closed) ? myMenu.open() : myMenu.close()
+            onClicked: (editMenu.status === DialogStatus.Closed) ? editMenu.open() : editMenu.close()
         }
     }
-    
-    
-    
 }
 
 

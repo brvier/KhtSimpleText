@@ -22,7 +22,9 @@ PageStackWindow {
         ToolIcon {
             platformIconId: "toolbar-add"
             anchors.left: (parent === undefined) ? undefined : parent.left
-            onClicked: notYetAvailableBanner.show()
+            /*onClicked: notYetAvailableBanner.show()*/
+            onClicked: newDialog.open()
+
         }
         ToolIcon {
             platformIconId: "toolbar-view-menu"
@@ -41,7 +43,6 @@ PageStackWindow {
         }
     }
 
-
     InfoBanner{
                       id:notYetAvailableBanner
                       text: 'This feature is not yet available'
@@ -53,8 +54,41 @@ PageStackWindow {
                  }
 
 
+   showStatusBar: true
 
+    Dialog {
+               id: newDialog               
+               title: Label {text:'New file name :'; color: 'white'; }
 
+               content: Item {
+                   height: 100
+                   anchors {left: parent.left; right: parent.right; verticalCenter:parent.verticalCenter}
+                   TextField {
+                   id: newDialogTextField
+                   anchors {left: parent.left; right: parent.right; verticalCenter:parent.verticalCenter}
+                   maximumLength: 60
+                   height: 50
+                   focus: true
+                }
+               }
+
+                buttons: Row {
+                   anchors.horizontalCenter: parent.horizontalCenter
+                   spacing: 30
+                   Button {
+                       text: "Create"; 
+                       onClicked: {
+                            newDialog.accept();
+                            pageStack.push(fileEditPage, { filePath: fileBrowserPage.currentFolder + '/' +newDialogTextField.text });
+
+                       }
+                   }
+                   Button {
+                       anchors.topMargin: 40
+                       text: "Cancel"; onClicked: newDialog.reject()
+                   }}
+     }
+    
     QueryDialog {
                 id: about
                 icon: Qt.resolvedUrl('../icons/khtsimpletext.png')
