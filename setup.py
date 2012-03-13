@@ -48,14 +48,14 @@ setup(name='khtsimpletext',
       options = { 'sdist_maemo':{
       'buildversion':'1',
       'depends':'python-pyside.qtdeclarative, python-pyside.qtcore, python-pyside.qtgui',
-      'Maemo_Bugtracker':'http://khertan.net/khtsimpletext:bugs',
+      'Maemo_Bugtracker':'https://github.com/khertan/KhtSimpleText/issues',
       'Maemo_Display_Name':'KhtSimpleText',
       'Maemo_Icon_26':'khtsimpletext.png',
       'Maemo_Flags':'visible',
       'MeeGo_Desktop_Entry_Filename':'/usr/share/applications/khtsimpletext.desktop',
       'section':'user/utilities',
-      'changelog':'* First public release',
-      'Maemo_Upgrade_Description':'First public release',
+      'changelog':'* Fix bug tracker url of package\n* fix refresh of folder/file view',
+      'Maemo_Upgrade_Description':'Fix bug tracker url of package\n *fix refresh of folder/file view',
       'architecture':'any',
       'postinst':"""#!/bin/sh
 chmod +x /usr/local/bin/khtsimpletext_launch.py
