@@ -6,11 +6,12 @@ Page {
     tools: commonTools
 
     property string currentFolder;
-
-/*    function newFile(name) {
-        
-    }*/
-
+    signal refresh();
+    
+    onRefresh: {
+		folderModel.nameFilters = '*';    	
+    }
+    
     Rectangle {
         id:header
         anchors.top: parent.top
@@ -59,7 +60,6 @@ Page {
 
         FolderListModel {
             id: folderModel
-            //nameFilters: ["*.txt"]
             folder: '~'
             showDotAndDotDot : true
         }
@@ -114,17 +114,6 @@ Page {
                         else {
                              pageStack.push(fileEditPage, { filePath: filePath });
                         }
-
-
-                        /*if (fileView.model.model.isDir(fileView.model.modelIndex(index))){
-                                            //titlelabel.text = 'Open File : ' + filePath
-                                            fileView.model.rootIndex = fileView.model.modelIndex(index)
-                                        }
-                                        else {
-                                            fileView.model.model.setCurrentPath(filePath)
-                                            //TODO: OPEN THE FILE
-                                            //rootWin.openFile(filePath)
-                                        }*/
                     }
                 }
             }
@@ -134,5 +123,10 @@ Page {
 
     }
 
+    onStatusChanged: {
+         if (status == PageStatus.Active) {
+              folderModel.nameFilters = '*';
+         }
+    }
 
 }

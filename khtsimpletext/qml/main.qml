@@ -80,7 +80,6 @@ PageStackWindow {
                        onClicked: {
                             newDialog.accept();
                             pageStack.push(fileEditPage, { filePath: fileBrowserPage.currentFolder + '/' +newDialogTextField.text });
-
                        }
                    }
                    Button {
@@ -99,4 +98,17 @@ PageStackWindow {
                          'Licenced under GPLv3\n' +
                          'Web Site : http://khertan.net/khtsimpletext'
                 }
+
+
+    states: [
+            State {
+                        name: "fullsize-visible"
+                        when: platformWindow.viewMode == WindowState.Fullsize && platformWindow.visible
+                        StateChangeScript {
+                                 script: {
+                                 console.log("Visibility: Fullsize and visible!");
+                                 pageStack.currentPage.refresh();
+                                 }       }
+                  }                                                                                                          
+            ]
 }

@@ -12,7 +12,6 @@ Todo
   * shorten uri
   * Preferences
   * Markdown preview
-  * Update folder view after on activate
   * Fix size of new dialog
   * Add create folder option
   * Add delete option

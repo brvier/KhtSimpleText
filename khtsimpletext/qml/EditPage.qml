@@ -8,6 +8,11 @@ Page {
     property string filePath;
     property bool modified;
 
+    signal refresh();
+    
+    onRefresh: {
+               }
+                            
     onFilePathChanged: {
         if (filePath !== '') {
             console.log('FilePathChanger');
