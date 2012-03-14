@@ -9,7 +9,7 @@ Page {
     signal refresh();
     
     onRefresh: {
-		folderModel.nameFilters = '*';    	
+	folderModel.nameFilters = '*';
     }
     
     Rectangle {

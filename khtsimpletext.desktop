@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Version=1.0
 Type=Application
-Name=KhtSimpleText
-Exec=/usr/local/bin/khtsimpletext_launch.py
+Name=MeeEdit
+Exec=/usr/bin/invoker --type--single=e -n -instance /usr/local/bin/khtsimpletext_launch.py
 Icon=khtsimpletext
 
