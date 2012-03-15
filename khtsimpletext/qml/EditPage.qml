@@ -111,6 +111,12 @@ Page {
    
    
      }
+
+
+    ScrollDecorator {
+        flickableItem: flick
+        platformStyle: ScrollDecoratorStyle {
+        }}
     
     Menu {
         id: editMenu
