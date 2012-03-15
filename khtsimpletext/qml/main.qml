@@ -1,6 +1,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import com.nokia.extras 1.1
+import 'components'
 
 PageStackWindow {
     id: appWindow
@@ -13,7 +14,10 @@ PageStackWindow {
 
     EditPage {
         id: fileEditPage
+    }
 
+    ItemMenu {
+        id: itemMenu
     }
 
     ToolBarLayout {
