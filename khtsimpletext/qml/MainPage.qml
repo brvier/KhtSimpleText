@@ -123,6 +123,11 @@ Page {
 
     }
 
+  ScrollDecorator {
+        flickableItem: fileView
+        platformStyle: ScrollDecoratorStyle {
+        }
+
     onStatusChanged: {
          if (status == PageStatus.Active) {
               folderModel.nameFilters = '*';
