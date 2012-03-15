@@ -99,6 +99,7 @@ Page {
                     id:moreIcon
                     source: "image://theme/icon-m-common-drilldown-arrow"
                     anchors.right: parent.right;
+                    anchors.rightMargin: 5
                     anchors.verticalCenter: parent.verticalCenter
                     opacity: folderModel.isFolder(index)
                 }
@@ -125,8 +126,9 @@ Page {
 
   ScrollDecorator {
         flickableItem: fileView
+        z:3
         platformStyle: ScrollDecoratorStyle {
-        }
+        }}
 
     onStatusChanged: {
          if (status == PageStatus.Active) {
