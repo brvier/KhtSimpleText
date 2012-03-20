@@ -18,11 +18,11 @@ from PySide.QtCore import QUrl, QDir, Slot, QObject
 from PySide import QtDeclarative
 
 import sys
-import os.path
+import os
 
 __author__ = 'Benoît HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '0.2.1'
+__version__ = '0.3.0'
 
 class QmlFileReaderWriter(QObject):
 
@@ -32,6 +32,16 @@ class QmlFileReaderWriter(QObject):
        with open(QUrl(path).path(), 'rb') as fh:
            return unicode(fh.read(), 'utf-8')
        return u''
+
+   @Slot(unicode,result=bool)
+   def newFolder(self,path):
+#       try:
+           path = QUrl(path).path()
+           print path
+           os.makedirs(path)
+           return True
+#       except:
+#          return False       
 
    @Slot(unicode, unicode)
    def write(self, path, data):

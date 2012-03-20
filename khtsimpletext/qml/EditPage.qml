@@ -49,7 +49,7 @@ Page {
         PageHeader {
          id: header
          title: 'KhtSimpleText'
-         subtitle: filepath
+         subtitle: filePath
     }
 
 

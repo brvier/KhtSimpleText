@@ -2,17 +2,19 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import Qt.labs.folderlistmodel 1.0
 import 'components'
+import 'common.js' as Common
 
 Page {
-    tools: commonTools
+    tools: mainTools
 
-    property string currentFolder;
+    property alias currentFolder: folderModel.folder;
     signal refresh();
     
     onRefresh: {
 	folderModel.nameFilters = '*';
     }
-    
+   
+        
     PageHeader {
          id: header
          title: 'KhtSimpleText'
@@ -57,13 +59,16 @@ Page {
                         anchors.right: parent.right
                     }
 
-                    Label {text:filePath
+                    Label {
+                        text: Common.beautifulPath(filePath);
                         font.family: "Nokia Pure Text"
                         font.pixelSize: 16
                         color: "#cc6633"
                         anchors.left: parent.left;
                         anchors.right: parent.right
-                    }
+                        elide: Text.ElideRight
+                        maximumLineCount: 1
+                        }
                 }
 
                 Image {
@@ -78,10 +83,9 @@ Page {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        console.log(filePath)
+                        console.log(filePath.path)
                         if (folderModel.isFolder(index)) {
                             folderModel.folder  = filePath
-                            currentFolder = filePath
                         }
                         else {
                              pageStack.push(fileEditPage, { filePath: filePath });

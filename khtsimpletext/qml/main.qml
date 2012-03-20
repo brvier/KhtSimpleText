@@ -12,6 +12,14 @@ PageStackWindow {
         id: fileBrowserPage
     }
 
+    NewFilePage {
+        id: newFilePage
+    }
+
+    NewFolderPage {
+        id: newFolderPage
+    }
+
     EditPage {
         id: fileEditPage
     }
@@ -21,14 +29,23 @@ PageStackWindow {
     }
 
     ToolBarLayout {
-        id: commonTools
+        id: mainTools
         visible: true
         ToolIcon {
-            platformIconId: "toolbar-add"
-            anchors.left: (parent === undefined) ? undefined : parent.left
-            /*onClicked: notYetAvailableBanner.show()*/
-            onClicked: newDialog.open()
+            platformIconId: "toolbar-view-menu"
+            anchors.right: (parent === undefined) ? undefined : parent.right
+            onClicked: (myMenu.status === DialogStatus.Closed) ? myMenu.open() : myMenu.close()
+        }
+    }
 
+
+    ToolBarLayout {
+        id: commonTools
+        visible: false
+        ToolIcon {
+            platformIconId: "toolbar-back"
+            anchors.left: (parent === undefined) ? undefined : parent.left
+            onClicked: pageStack.pop()
         }
         ToolIcon {
             platformIconId: "toolbar-view-menu"
@@ -43,6 +60,14 @@ PageStackWindow {
         visualParent: pageStack
         MenuLayout {
             MenuItem { text: qsTr("About"); onClicked: about.open()}
+            MenuItem { text: qsTr("New File"); onClicked: {
+                       pageStack.push(newFilePage, {filePath: fileBrowserPage.currentFolder});
+                       }
+            }
+            MenuItem { text: qsTr("New Folder");onClicked: {
+                       pageStack.push(newFolderPage, {filePath: fileBrowserPage.currentFolder});
+                       }
+            }
             MenuItem { text: qsTr("Preferences"); onClicked: notYetAvailableBanner.show(); }
         }
     }
@@ -57,6 +82,15 @@ PageStackWindow {
                       anchors.horizontalCenter: parent.horizontalCenter
                  }
 
+    InfoBanner{
+                      id:errorNewFolderBanner
+                      text: 'An error occur while creating new folder'
+                      timerShowTime: 15000
+                      timerEnabled:true
+                      anchors.top: parent.top
+                      anchors.topMargin: 60
+                      anchors.horizontalCenter: parent.horizontalCenter
+                 }
 
    showStatusBar: true
 
