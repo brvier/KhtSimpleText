@@ -62,12 +62,12 @@ chmod +x /usr/local/bin/khtsimpletext_launch.py
 """
 
     #Src
-    for root, dirs, fs in os.walk('/home/user/MyDocs/Projects/khtsimpletext/khtsimpletext'):
+    srcpath = '/home/user/MyDocs/Projects/khtsimpletext/khtsimpletext'
+    for root, dirs, fs in os.walk(srcpath):
       for f in fs:
-        prefix = 'khtsimpletext/'
-        if os.path.basename(root) != 'khtsimpletext':
-            prefix = prefix + os.path.basename(root) + '/'
-        files.append(prefix+os.path.basename(f))
+        prefix = os.path.relpath(os.path.join(root,f),(os.path.dirname(srcpath)))
+        print prefix
+        files.append(prefix)
 #    print files
 
     p['/usr/share/dbus-1/services'] = ['khtsimpletext.service',]
