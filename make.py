@@ -66,7 +66,7 @@ chmod +x /usr/local/bin/khtsimpletext_launch.py
     for root, dirs, fs in os.walk(srcpath):
       for f in fs:
         prefix = os.path.relpath(os.path.join(root,f),(os.path.dirname(srcpath)))
-        print prefix
+        print root, prefix
         files.append(prefix)
 #    print files
 

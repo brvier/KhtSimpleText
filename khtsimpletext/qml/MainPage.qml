@@ -18,7 +18,7 @@ Page {
     PageHeader {
          id: header
          title: 'KhtSimpleText'
-         subtitle: folderModel.folder
+         subtitle: Common.beautifulPath(folderModel.folder);
     }
 
     ListView {
@@ -92,7 +92,8 @@ Page {
                         }
                     }
                     onPressAndHold: {
-                        itemMenu.item = filePath
+                        itemMenu.item = filePath;
+//                        itemMenu.pageStack = appWindow;
                         itemMenu.open();
                    }
                 }

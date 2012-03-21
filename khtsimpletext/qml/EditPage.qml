@@ -1,6 +1,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import 'components'
+import 'common.js' as Common
 
 Page {
     tools: editTools
@@ -49,7 +50,7 @@ Page {
         PageHeader {
          id: header
          title: 'KhtSimpleText'
-         subtitle: filePath
+         subtitle: Common.beautifulPath(filePath);
     }
 
 
