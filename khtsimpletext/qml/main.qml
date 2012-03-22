@@ -24,6 +24,10 @@ PageStackWindow {
         id: fileEditPage
     }
 
+    RenamePage {
+        id: renameFilePage
+    }
+
     ItemMenu {
         id: itemMenu
     }
@@ -93,6 +97,13 @@ PageStackWindow {
                  }
 
    showStatusBar: true
+
+    QueryDialog {
+        property string filepath
+        id: deleteQueryDialog
+        titleText: "KhtSimpleText Delete"
+        message: "Are you sure you want to delete : " + filepath
+    }
 
     Dialog {
                id: newDialog               

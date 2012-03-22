@@ -35,13 +35,35 @@ class QmlFileReaderWriter(QObject):
 
    @Slot(unicode,result=bool)
    def newFolder(self,path):
-#       try:
+       try:
            path = QUrl(path).path()
-           print path
            os.makedirs(path)
            return True
-#       except:
-#          return False       
+       except:
+          return False       
+
+   @Slot(unicode,unicode,result=bool)
+   def rename(self,oldpath,newpath):
+       try:
+           oldpath = QUrl(oldpath).path()
+           newpath = QUrl(newpath).path()
+           os.rename(oldpath,newpath)
+           return True
+       except:
+          return False       
+
+   @Slot(unicode,result=bool)
+   def delete(self,path):
+       try:
+           path = QUrl(path).path()
+           if os.path.isdir(path):
+                import shutil
+                shutil.rmtree(path)
+           else:
+                os.remove(path)
+           return True
+       except:
+          return False       
 
    @Slot(unicode, unicode)
    def write(self, path, data):
