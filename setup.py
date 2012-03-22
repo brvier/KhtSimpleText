@@ -6,6 +6,9 @@ import khtsimpletext
 import sys
 reload(sys).setdefaultencoding("UTF-8")
 
+changelog = '* Implement rename and delete feature in contextual menu * fix package display name'
+buildversion = 1
+
 try:
     from sdist_maemo import sdist_maemo as _sdist_maemo
 except:
@@ -46,16 +49,16 @@ setup(name='khtsimpletext',
       scripts=['khtsimpletext_launch.py'],
       cmdclass={'sdist_maemo': _sdist_maemo},
       options = { 'sdist_maemo':{
-      'buildversion':'4',
+      'buildversion':buildversion,
       'depends':'python, python-pyside.qtdeclarative, python-pyside.qtcore, python-pyside.qtgui',
       'Maemo_Bugtracker':'https://github.com/khertan/KhtSimpleText/issues',
-      'Maemo_Display_Name':'MeeEdit',
+      'Maemo_Display_Name':'KhtSimpleText',
       'Maemo_Icon_26':'khtsimpletext.png',
       'Maemo_Flags':'visible',
       'MeeGo_Desktop_Entry_Filename':'/usr/share/applications/khtsimpletext.desktop',
       'section':'user/utilities',
-      'changelog':'* Add invoker call and better display name',
-      'Maemo_Upgrade_Description':'* Add invoker call and better display name',
+      'changelog':changelog,
+      'Maemo_Upgrade_Description':changelog,
       'architecture':'any',
       'postinst':"""#!/bin/sh
 chmod +x /usr/local/bin/khtsimpletext_launch.py

@@ -15,8 +15,6 @@ Todo
 
   * Preferences
   * Markdown preview
-  * Fix size of new dialog
-  * Add delete option
   * Add move option
 
 

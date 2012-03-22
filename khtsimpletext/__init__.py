@@ -22,7 +22,7 @@ import os
 
 __author__ = 'Benoît HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 
 class QmlFileReaderWriter(QObject):
 
