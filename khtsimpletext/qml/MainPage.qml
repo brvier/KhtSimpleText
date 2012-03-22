@@ -45,6 +45,14 @@ Page {
                 anchors.leftMargin: 10
                 color:"white"
 
+                Rectangle {
+                    id: background
+                    anchors.fill: parent
+                    color: "darkgray";
+                    opacity: 0.0 
+                    Behavior on opacity { NumberAnimation {} }
+                }
+
                 Column {
                     spacing: 10
                     anchors.leftMargin:10
@@ -82,6 +90,10 @@ Page {
 
                 MouseArea {
                     anchors.fill: parent
+                    onPressed: background.opacity = 1.0;
+                    onReleased: background.opacity = 0.0;
+                    onPositionChanged: background.opacity = 0.0;
+
                     onClicked: {
                         console.log(filePath.path)
                         if (folderModel.isFolder(index)) {
