@@ -7,7 +7,7 @@ import sys
 reload(sys).setdefaultencoding("UTF-8")
 
 changelog = '* Implement rename and delete feature in contextual menu * fix package display name'
-buildversion = 1
+buildversion = '1'
 
 try:
     from sdist_maemo import sdist_maemo as _sdist_maemo
