@@ -18,6 +18,7 @@ Todo
   * Preferences
   * Markdown preview
   * Add move/copy option
+  * AutoSave feature (Require a way to test if file aren't aegis protected)
 
 
 Screenshot
