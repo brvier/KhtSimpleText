@@ -2,6 +2,7 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import com.nokia.extras 1.1
 import 'components'
+import 'common.js' as Common
 
 PageStackWindow {
     id: appWindow
@@ -87,7 +88,7 @@ PageStackWindow {
                  }
 
     InfoBanner{
-                      id:errorNewFolderBanner
+                      id:errorBanner
                       text: 'An error occur while creating new folder'
                       timerShowTime: 15000
                       timerEnabled:true
@@ -101,11 +102,21 @@ PageStackWindow {
     QueryDialog {
         property string filepath
         id: deleteQueryDialog
-        titleText: "KhtSimpleText Delete"
-        message: "Are you sure you want to delete : " + filepath
+        icon: Qt.resolvedUrl('../icons/khtsimpletext.png')
+        titleText: "Delete"
+        message: "Are you sure you want to delete : " + Common.beautifulPath(filepath) + '?'
+        acceptButtonText: qsTr("Delete")
+        rejectButtonText: qsTr("Cancel")
+        onAccepted: {
+                if (!(QmlFileReaderWriter.rm(filepath))) {
+                    errorBanner.text = 'An error occur while deleting item';
+                    errorBanner.show();
+                }
+                else {fileBrowserPage.refresh();}
+        }
     }
 
-    Dialog {
+    /*Dialog {
                id: newDialog               
                title: Label {text:'New file name :'; color: 'white'; }
 
@@ -135,7 +146,7 @@ PageStackWindow {
                        anchors.topMargin: 40
                        text: "Cancel"; onClicked: newDialog.reject()
                    }}
-     }
+     }*/
     
     QueryDialog {
                 id: about

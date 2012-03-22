@@ -53,7 +53,7 @@ class QmlFileReaderWriter(QObject):
           return False       
 
    @Slot(unicode,result=bool)
-   def delete(self,path):
+   def rm(self,path):
        try:
            path = QUrl(path).path()
            if os.path.isdir(path):
@@ -62,7 +62,8 @@ class QmlFileReaderWriter(QObject):
            else:
                 os.remove(path)
            return True
-       except:
+       except Exception, e:
+          print e
           return False       
 
    @Slot(unicode, unicode)
