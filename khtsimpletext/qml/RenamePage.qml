@@ -26,7 +26,7 @@ Page {
         spacing: 12
 
         Label {
-            text: 'Rename ' + fileName + ' to :'
+            text: 'Rename ' + Common.beautifulPath(filePath) + ' to :'
         }
 
         TextField {
@@ -34,6 +34,7 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             placeholderText: fileName
+            text: fileName
         }
 
         Button {
@@ -43,8 +44,9 @@ Page {
             text: "Rename"
             onClicked: {
                 pageStack.pop();
-                if (!QmlFileReaderWriter.rename(filePath + fileName, filePath + inputField.text))
-                      errorRenameBanner.show();
+                if (!QmlFileReaderWriter.rename(filePath, fileName,inputField.text)) {
+                      errorBanner.text = 'An error occur while renaming file';
+                      errorBanner.show();}
             }
         }
     }

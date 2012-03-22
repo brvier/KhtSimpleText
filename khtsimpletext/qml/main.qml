@@ -16,6 +16,12 @@ PageStackWindow {
     NewFilePage {
         id: newFilePage
     }
+    CopyFilePage {
+        id: copyFilePage
+    }
+    MoveFilePage {
+        id: moveFilePage
+    }
 
     NewFolderPage {
         id: newFolderPage
@@ -50,7 +56,7 @@ PageStackWindow {
         ToolIcon {
             platformIconId: "toolbar-back"
             anchors.left: (parent === undefined) ? undefined : parent.left
-            onClicked: pageStack.pop()
+            onClicked: pageStack.pop();
         }
         ToolIcon {
             platformIconId: "toolbar-view-menu"

@@ -6,24 +6,21 @@ Menu {
     id: itemMenu
     visualParent: pageStack
 
-    //property PageStack pageStack
     property string filePath
     property string fileName
   
     MenuLayout {
         MenuItem {
             text: qsTr("Copy")
-            enabled: false
-            onClicked: ;
+            onClicked: pageStack.push(copyFilePage, { filePath: filePath, fileName: fileName });
         }
         MenuItem {
             text: qsTr("Move")
-            enabled: false
-            onClicked: ;
+            onClicked: pageStack.push(moveFilePage, { filePath: filePath, fileName: fileName });
         }
         MenuItem {
             text: qsTr("Rename")
-            onClicked: pageStack.replace(renameFilePage, { filePath: filePath, fileName: fileName });
+            onClicked: pageStack.push(renameFilePage, { filePath: filePath, fileName: fileName });
         }
         MenuItem {
             text: qsTr("Delete")

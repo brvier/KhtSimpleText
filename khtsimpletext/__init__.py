@@ -22,7 +22,7 @@ import os
 
 __author__ = 'Benoît HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 
 class QmlFileReaderWriter(QObject):
 
@@ -42,12 +42,13 @@ class QmlFileReaderWriter(QObject):
        except:
           return False       
 
-   @Slot(unicode,unicode,result=bool)
-   def rename(self,oldpath,newpath):
+   @Slot(unicode,unicode,unicode,result=bool)
+   def rename(self,pathdir,oldname,newname):
        try:
-           oldpath = QUrl(oldpath).path()
-           newpath = QUrl(newpath).path()
-           os.rename(oldpath,newpath)
+           pathdir = os.path.dirname(QUrl(pathdir).path())
+           oldpath = QUrl(oldname).path()
+           newpath = QUrl(newname).path()
+           os.rename(os.path.join(pathdir, oldname),os.path.join(pathdir, newname))
            return True
        except:
           return False       
