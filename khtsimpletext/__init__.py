@@ -53,6 +53,28 @@ class QmlFileReaderWriter(QObject):
        except:
           return False       
 
+   @Slot(unicode,unicode,result=bool)
+   def mv(self,oldpath,newpath):
+       try:
+           import shutil
+           oldpath = QUrl(oldpath).path()
+           newpath = QUrl(newpath).path()
+           shutil.move( oldpath, newpath)
+           return True
+       except:
+          return False
+
+   @Slot(unicode,unicode,result=bool)
+   def cp(self,oldpath,newpath):
+       try:
+           import shutil
+           oldpath = QUrl(oldpath).path()
+           newpath = QUrl(newpath).path()
+           shutil.copy2( oldpath, newpath)
+           return True
+       except:
+          return False
+
    @Slot(unicode,result=bool)
    def rm(self,path):
        try:

@@ -41,10 +41,10 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             enabled: inputField.text != ""
-            text: "Create file"
+            text: "Move file"
             onClicked: {
                 pageStack.pop()
-                if (!QmlFileReaderWriter.mv(inputField.text)) {
+                if (!QmlFileReaderWriter.mv(filePath, inputField.text)) {
                       errorBanner.text = 'An error occur while moving file';
                       errorBanner.show();}
             }

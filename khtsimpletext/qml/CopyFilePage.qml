@@ -44,7 +44,7 @@ Page {
             text: "Create file"
             onClicked: {
                 pageStack.pop()
-                if (!QmlFileReaderWriter.cp(inputField.text)) {
+                if (!QmlFileReaderWriter.cp(filePath, inputField.text)) {
                       errorBanner.text = 'An error occur while copying file';
                       errorBanner.show();}
             }
