@@ -97,7 +97,7 @@ Page {
         MenuLayout {
             MenuItem { text: qsTr("About"); onClicked: about.open()}
             MenuItem { text: qsTr("Save"); onClicked: saveFile()}
-            MenuItem { text: qsTr("Preferences"); onClicked: notYetAvailableBanner.show(); }
+            /*MenuItem { text: qsTr("Preferences"); onClicked: notYetAvailableBanner.show(); }*/
         }
     }
 

@@ -79,7 +79,7 @@ PageStackWindow {
                        pageStack.push(newFolderPage, {filePath: fileBrowserPage.currentFolder});
                        }
             }
-            MenuItem { text: qsTr("Preferences"); onClicked: notYetAvailableBanner.show(); }
+            /*MenuItem { text: qsTr("Preferences"); onClicked: notYetAvailableBanner.show(); }*/
         }
     }
 

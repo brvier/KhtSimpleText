@@ -25,7 +25,7 @@ import socket
 import khtsimpletext
 import pypackager
 
-__build__ = '4'
+__build__ = '5'
 __author__ = "Benoît HERVIER (khertan)"
 __mail__ = "khertan@khertan.net"
 
