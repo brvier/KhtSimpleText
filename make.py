@@ -25,8 +25,8 @@ import socket
 import khtsimpletext
 import pypackager
 
-__build__ = '1'
-__author__ = "khertan"
+__build__ = '4'
+__author__ = "Benoît HERVIER (khertan)"
 __mail__ = "khertan@khertan.net"
 
 if __name__ == "__main__":
@@ -72,10 +72,8 @@ chmod +x /opt/khtsimpletext/khtsimpletext_launch.py
     p['/usr/share/dbus-1/services'] = ['khtsimpletext.service',]
     p['/usr/share/pixmaps'] = ['khtsimpletext.png',]
     p['/usr/share/icons/blanco/80x80/apps'] = ['khtsimpletext.png',]
-    p['/opt/khtsimpletext'] = ['khtsimpletext_launch.py',]
-
     p['/usr/share/applications'] = ['khtsimpletext.desktop',]
-    p["/opt/khtsimpletext"] = files
+    p["/opt"] = files
     
     print p.generate(build_binary=True,build_src=False)
     print p.generate(build_binary=False,build_src=True)
