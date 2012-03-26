@@ -25,7 +25,7 @@ import socket
 import khtsimpletext
 import pypackager
 
-__build__ = '6'
+__build__ = '1'
 __author__ = "khertan"
 __mail__ = "khertan@khertan.net"
 
@@ -39,8 +39,8 @@ if __name__ == "__main__":
     p.display_name = 'KhtSimpleText'
     p.version = khtsimpletext.__version__
     p.buildversion = __build__
-    p.description="A plain text editor for Harmattan"
-    p.upgrade_description="Support now invoker"
+    p.description="A plain text editor for Harmattan devices (n950, n9)"
+    p.upgrade_description="Support now invoker, better packaging"
     p.author=__author__
     p.maintainer=__author__    
     p.email=__mail__
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     p.meego_desktop_entry_filename = '/usr/share/applications/khtsimpletext.desktop'
     files = []
     p.postinst = """#!/bin/sh
-chmod +x /usr/local/bin/khtsimpletext_launch.py
+chmod +x /opt/khtsimpletext/khtsimpletext_launch.py
 """
 
     #Src
@@ -68,15 +68,14 @@ chmod +x /usr/local/bin/khtsimpletext_launch.py
         prefix = os.path.relpath(os.path.join(root,f),(os.path.dirname(srcpath)))
         print root, prefix
         files.append(prefix)
-#    print files
 
     p['/usr/share/dbus-1/services'] = ['khtsimpletext.service',]
     p['/usr/share/pixmaps'] = ['khtsimpletext.png',]
     p['/usr/share/icons/blanco/80x80/apps'] = ['khtsimpletext.png',]
-    p['/usr/local/bin'] = ['khtsimpletext_launch.py',]
+    p['/opt/khtsimpletext'] = ['khtsimpletext_launch.py',]
 
     p['/usr/share/applications'] = ['khtsimpletext.desktop',]
-    p["/usr/lib/pymodules/python2.6"] = files
+    p["/opt/khtsimpletext"] = files
     
-    #print p.generate(build_binary=False,build_src=True)
     print p.generate(build_binary=True,build_src=False)
+    print p.generate(build_binary=False,build_src=True)
