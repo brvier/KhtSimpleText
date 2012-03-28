@@ -4,53 +4,28 @@ import 'components'
 import 'common.js' as Common
 
 Page {
-    tools: editTools
-    id: editPage
+    tools: simpleBackTools
+    id: previewPage
 
-    property string filePath;
-    property bool modified;
+    property string atext;
 
     signal refresh();
     
     onRefresh: {
-               }
-                            
-    onFilePathChanged: {
-        if (filePath !== '') {
-            console.log('FilePathChanger');
-            textEditor.text = QmlFileReaderWriter.read(filePath);
-            modified = false;
-            flick.returnToBounds();
-            }
-    }
+               }                            
     
     function exitFile() {    
-        textEditor.text = '';
-        filePath = '';
-        modified = false;
         pageStack.pop();
     }
 
-    function saveFile() {    
-        QmlFileReaderWriter.write(filePath, textEditor.text);
-        modified = false;
+    function previewText() {    
+        textEditor.text = QmlFileReaderWriter.previewMarkdown(text);
     }
         
-    QueryDialog {
-                id:unsavedDialog
-                titleText:"Unsaved"
-                icon: Qt.resolvedUrl('../icons/khtsimpletext.png')
-                message:"Did you want to save file before closing it ?";
-                acceptButtonText: 'Save';
-                rejectButtonText: 'Close';
-                onRejected: { exitFile(); }
-                onAccepted: { saveFile();exitFile(); }
-                }
-
         PageHeader {
          id: header
          title: 'KhtSimpleText'
-         subtitle: Common.beautifulPath(filePath);
+         subtitle: 'Preview';
     }
 
 
@@ -75,11 +50,11 @@ Page {
              TextArea {
                  id: textEditor
                  height: Math.max (700, implicitHeight)
-                 width: editPage.width + 4
+                 width: previewPage.width + 4
                  wrapMode: TextEdit.Wrap
-                 textFormat: TextEdit.PlainText
+                 textFormat: TextEdit.RichText
+                 text: QmlFileReaderWriter.previewMarkdown(atext)
                  font { bold: false; family: "Nokia Pure Text"; pixelSize: 18;}
-                 onTextChanged: { modified = true;}
          }
    
    
@@ -96,21 +71,17 @@ Page {
         visualParent: pageStack
         MenuLayout {
             MenuItem { text: qsTr("About"); onClicked: about.open()}
-            MenuItem { text: qsTr("MarkDown Preview"); onClicked: pageStack.push(previewPage, {atext:textEditor.text}); }
-            MenuItem { text: qsTr("Save"); onClicked: saveFile()}
-            /*MenuItem { text: qsTr("Preferences"); onClicked: notYetAvailableBanner.show(); }*/
-        }
+         }
     }
 
     ToolBarLayout {
-        id: editTools
+        id: simpleBackTools
         visible: true
         ToolIcon {
             platformIconId: "toolbar-back"
             anchors.left: (parent === undefined) ? undefined : parent.left
             onClicked: {
-                   if (modified == true ) unsavedDialog.open(); 
-                   else exitFile();
+                    pageStack.pop();
                    }
         }
 

@@ -25,7 +25,7 @@ import socket
 import khtsimpletext
 import pypackager
 
-__build__ = '5'
+__build__ = '1'
 __author__ = "Benoît HERVIER (khertan)"
 __mail__ = "khertan@khertan.net"
 
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     p.version = khtsimpletext.__version__
     p.buildversion = __build__
     p.description="A plain text editor for Harmattan devices (n950, n9)"
-    p.upgrade_description="Support now invoker, better packaging"
+    p.upgrade_description="Implement MarkDown preview"
     p.author=__author__
     p.maintainer=__author__    
     p.email=__mail__

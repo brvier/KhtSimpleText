@@ -31,6 +31,10 @@ PageStackWindow {
         id: fileEditPage
     }
 
+    PreviewPage {
+        id: previewPage
+    }
+
     RenamePage {
         id: renameFilePage
     }

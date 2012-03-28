@@ -19,13 +19,19 @@ from PySide import QtDeclarative
 
 import sys
 import os
+import markdown2
 
 __author__ = 'Benoît HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '0.3.3'
+__version__ = '0.4.0'
 
 class QmlFileReaderWriter(QObject):
 
+   
+   @Slot(unicode, result=unicode)    
+   def previewMarkdown(self, text):
+       return markdown2.markdown(text)
+       
    @Slot(unicode, result=unicode)
    def read(self,path):
        print QUrl(path).path()
