@@ -1,21 +1,22 @@
-:date 03/22/2012
-:tags python, qt, qml, pyside, text, editor, harmattan
+#KhtSimpleText
 
-#KhtSimpleText 0.3.1
-
-A new release of KhtSimpleText is available in [apps4MeeGo][1]. For those who don't know what is it, it s a simple text editor for harmattan specially designed for n9 and n950 device. Currently still in development, the version implement the following features :
+a simple text editor for harmattan specially designed for n9 and n950 device. Currently still in development, the version implement the following features :
 
  * Browse in the local file system
  * Open / Edit / Save a text file
  * Delete / Rename file
- 
-I've also planned to implement other features :
-
  * Markdown Preview
  * Copy / Move file
  * Preferences for changing font
+ *  Syntax highlighting for many languages
+
+I've also planned to implement other features :
+
  * Auto save feature
- 
+
+Know bugs :
+  
+  * add hidden file in  the folder  model 
 Some screenshots of an older version :
 
 ![KhtSimpleText Screenshot 1][4]

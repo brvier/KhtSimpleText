@@ -44,7 +44,7 @@ Page {
             text: "Rename"
             onClicked: {
                 pageStack.pop();
-                if (!QmlFileReaderWriter.rename(filePath, fileName,inputField.text)) {
+                if (!QmlDirReaderWriter.rename(filePath, fileName,inputField.text)) {
                       errorBanner.text = 'An error occur while renaming file';
                       errorBanner.show();}
             }

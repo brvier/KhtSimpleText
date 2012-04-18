@@ -44,7 +44,7 @@ Page {
             text: "Move file"
             onClicked: {
                 pageStack.pop()
-                if (!QmlFileReaderWriter.mv(filePath, inputField.text)) {
+                if (!QmlDirReaderWriter.mv(filePath, inputField.text)) {
                       errorBanner.text = 'An error occur while moving file';
                       errorBanner.show();}
             }

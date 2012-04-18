@@ -18,9 +18,9 @@ Page {
         pageStack.pop();
     }
 
-    function previewText() {    
-        textEditor.text = QmlFileReaderWriter.previewMarkdown(text);
-    }
+    /*function previewText() {    
+        textEditor.text = Document.previewMarkdown(text);
+    }*/
         
         PageHeader {
          id: header
@@ -31,8 +31,6 @@ Page {
 
     Flickable {
          id: flick
-         flickableDirection: Flickable.VerticalFlick
-         //boundsBehavior: Flickable.DragOverBounds
          anchors.top: header.bottom
          anchors.left: parent.left
          anchors.leftMargin: -2
@@ -49,11 +47,11 @@ Page {
 
              TextArea {
                  id: textEditor
-                 height: Math.max (700, implicitHeight)
-                 width: previewPage.width + 4
-                 wrapMode: TextEdit.Wrap
+                 height: Math.max (850, implicitHeight)
+                 width: implicitWidth //previewPage.width + 4
+                 wrapMode: TextEdit.NoWrap
                  textFormat: TextEdit.RichText
-                 text: QmlFileReaderWriter.previewMarkdown(atext)
+                 text: Document.previewMarkdown(atext)
                  font { bold: false; family: "Nokia Pure Text"; pixelSize: 18;}
          }
    

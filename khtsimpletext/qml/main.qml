@@ -118,7 +118,7 @@ PageStackWindow {
         acceptButtonText: qsTr("Delete")
         rejectButtonText: qsTr("Cancel")
         onAccepted: {
-                if (!(QmlFileReaderWriter.rm(filepath))) {
+                if (!(QmlDirReaderWriter.rm(filepath))) {
                     errorBanner.text = 'An error occur while deleting item';
                     errorBanner.show();
                 }
@@ -127,7 +127,7 @@ PageStackWindow {
     }
 
     /*Dialog {
-               id: newDialog               
+               id: newDialog
                title: Label {text:'New file name :'; color: 'white'; }
 
                content: Item {
@@ -146,7 +146,7 @@ PageStackWindow {
                    anchors.horizontalCenter: parent.horizontalCenter
                    spacing: 30
                    Button {
-                       text: "Create"; 
+                       text: "Create";
                        onClicked: {
                             newDialog.accept();
                             pageStack.push(fileEditPage, { filePath: fileBrowserPage.currentFolder + '/' +newDialogTextField.text });
@@ -157,7 +157,7 @@ PageStackWindow {
                        text: "Cancel"; onClicked: newDialog.reject()
                    }}
      }*/
-    
+
     QueryDialog {
                 id: about
                 icon: Qt.resolvedUrl('../icons/khtsimpletext.png')
@@ -179,6 +179,6 @@ PageStackWindow {
                                  console.log("Visibility: Fullsize and visible!");
                                  pageStack.currentPage.refresh();
                                  }       }
-                  }                                                                                                          
+                  }
             ]
 }

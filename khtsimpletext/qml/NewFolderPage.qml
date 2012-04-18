@@ -42,7 +42,7 @@ Page {
             text: "Create folder"
             onClicked: {
                 pageStack.pop();
-                if (!QmlFileReaderWriter.newFolder(filePath + inputField.text)) {
+                if (!QmlDirReaderWriter.newFolder(filePath + inputField.text)) {
                       errorBanner.text = 'An error occur while creating new folder';
                       errorBanner.show();}
             }
