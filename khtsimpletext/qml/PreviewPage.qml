@@ -48,14 +48,12 @@ Page {
              TextArea {
                  id: textEditor
                  height: Math.max (850, implicitHeight)
-                 width: implicitWidth //previewPage.width + 4
+                 width: Math.max(flick.width, implicitWidth) //previewPage.width + 4
                  wrapMode: TextEdit.NoWrap
                  textFormat: TextEdit.RichText
                  text: Document.previewMarkdown(atext)
                  font { bold: false; family: "Nokia Pure Text"; pixelSize: 18;}
          }
-   
-   
      }
 
 

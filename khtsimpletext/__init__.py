@@ -159,7 +159,10 @@ class Document(QObject):
 
    @Slot(unicode, result=unicode)
    def previewMarkdown(self, text):
-       return markdown2.markdown(text)
+       try:
+           return markdown2.markdown(self._stripTags(text))
+       except:
+           return text
 
    def _stripTags(self,content):
       from BeautifulSoup import BeautifulSoup
@@ -171,7 +174,7 @@ class Document(QObject):
    @Slot(unicode)
    def write(self, data):
        if self._colored:
-          data = self.stripTags(data)
+          data = self._stripTags(data)
        with open(self.filepath, 'wb') as fh:
            fh.write(data.encode('utf-8'))
 
@@ -284,4 +287,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())
+    sys.exit(KhtSimpleText().exec_())   
