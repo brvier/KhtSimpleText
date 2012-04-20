@@ -101,8 +101,8 @@ class Document(QObject):
 
 
    def _load(self,path):
-       ''' Load the document from a path '''
- self.filepath = QUrl(path).path()
+        ''' Load the document from a path '''
+        self.filepath = QUrl(path).path()
         try:
           with open(self.filepath, 'rb') as fh:
             try:
