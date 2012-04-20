@@ -107,6 +107,21 @@ PageStackWindow {
                       anchors.horizontalCenter: parent.horizontalCenter
                  }
 
+    function onError(errMsg) {
+        errorEditBanner.text = errMsg;
+        errorEditBanner.show();
+    }
+
+    InfoBanner{
+                      id:errorEditBanner
+                      text: ''
+                      timerShowTime: 15000
+                      timerEnabled:true
+                      anchors.top: parent.top
+                      anchors.topMargin: 60
+                      anchors.horizontalCenter: parent.horizontalCenter
+                 }
+
    showStatusBar: true
 
     QueryDialog {

@@ -28,6 +28,10 @@ import pypackager
 __build__ = '1'
 __author__ = "Benoît HERVIER (khertan)"
 __mail__ = "khertan@khertan.net"
+__upgrade__ = '''Implement MarkDown preview
+Syntax Highlighting (not in realtime due to qml limitation)
+Fix loading of large text
+Add a busy cursor when loading text'''
 
 if __name__ == "__main__":
     try:
@@ -40,7 +44,7 @@ if __name__ == "__main__":
     p.version = khtsimpletext.__version__
     p.buildversion = __build__
     p.description="A plain text editor for Harmattan devices (n950, n9)"
-    p.upgrade_description="Implement MarkDown preview"
+    p.upgrade_description=__upgrade__
     p.author=__author__
     p.maintainer=__author__    
     p.email=__mail__
@@ -76,4 +80,4 @@ chmod +x /opt/khtsimpletext/khtsimpletext_launch.py
     p["/opt"] = files
     
     print p.generate(build_binary=True,build_src=False)
-    print p.generate(build_binary=False,build_src=True)
+    print p.generate(build_binary=False,build_src=True) 

@@ -11,11 +11,6 @@ Page {
     property bool modified;
     property bool colored;
 
-    signal refresh();
-
-    onRefresh: {
-               }
-
     onFilePathChanged: {
         if (filePath !== '') {
             console.log('FilePathChanger');

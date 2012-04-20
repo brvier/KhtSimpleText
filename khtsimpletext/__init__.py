@@ -128,7 +128,12 @@ class Document(QObject):
             return
        self._set_text(highlight(text, lexer, HtmlFormatter(full=True)))
        self._set_colored(True)
-     except:
+     except pygments.util.ClassNotFound:
+       self._set_text(text)
+       self._set_colored(False)
+     except Exception, e:
+       print e
+       self.on_error.emit(str(e))
        self._set_text(text)
        self._set_colored(False)
 
@@ -175,8 +180,12 @@ class Document(QObject):
    def write(self, data):
        if self._colored:
           data = self._stripTags(data)
-       with open(self.filepath, 'wb') as fh:
-           fh.write(data.encode('utf-8'))
+       try:
+           with open(self.filepath, 'wb') as fh:
+               fh.write(data.encode('utf-8'))
+       except Exception, e:
+           print e
+           self.on_error.emit(str(e))
 
    def _get_text(self):
        return self._text
@@ -223,8 +232,8 @@ class QmlDirReaderWriter(QObject):
    def rename(self,pathdir,oldname,newname):
        try:
            pathdir = os.path.dirname(QUrl(pathdir).path())
-           oldpath = QUrl(oldname).path()
-           newpath = QUrl(newname).path()
+           #oldpath = QUrl(oldname).path()
+           #newpath = QUrl(newname).path()
            os.rename(os.path.join(pathdir, oldname),os.path.join(pathdir, newname))
            return True
        except:
@@ -277,14 +286,18 @@ class KhtSimpleText(QApplication):
         self.setApplicationName("KhtSimpleText")
 
         self.view = QtDeclarative.QDeclarativeView()
-        self.view.rootContext().setContextProperty("argv", sys.argv)
-        self.view.rootContext().setContextProperty("__version__", __version__)
-        self.view.rootContext().setContextProperty("Settings", Settings())
-        self.view.rootContext().setContextProperty("QmlDirReaderWriter", QmlDirReaderWriter())
-        self.view.rootContext().setContextProperty('Document', Document())
+        self.aDocument = Document() 
+        self.rootContext = self.view.rootContext()
+        self.rootContext.setContextProperty("argv", sys.argv)
+        self.rootContext.setContextProperty("__version__", __version__)
+        self.rootContext.setContextProperty("Settings", Settings())
+        self.rootContext.setContextProperty("QmlDirReaderWriter", QmlDirReaderWriter())
+        self.rootContext.setContextProperty('Document', self.aDocument)
         self.view.setSource(QUrl.fromLocalFile(
                 os.path.join(os.path.dirname(__file__), 'qml',  'main.qml')))
+        self.rootObject = self.view.rootObject()
+        self.aDocument.on_error.connect(self.rootObject.onError)
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())   
+    sys.exit(KhtSimpleText().exec_())          
