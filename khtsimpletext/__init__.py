@@ -14,7 +14,7 @@
 ## GNU General Public License for more details.
 
 from PySide.QtGui import QApplication
-from PySide.QtCore import QUrl, QDir, Slot, QObject, Property, Signal
+from PySide.QtCore import QUrl, Slot, QObject, Property, Signal
 from PySide import QtDeclarative
 
 import threading
@@ -24,9 +24,9 @@ import markdown2
 import re
 import htmlentitydefs
 from pygments import highlight
-from pygments.formatters import HtmlFormatter, RtfFormatter
-from pygments.lexers import (get_lexer_by_name,
-     get_lexer_for_filename, get_lexer_for_mimetype)
+from pygments.formatters import HtmlFormatter
+from pygments.lexers import get_lexer_for_filename
+from pygments.utils import ClassNotFound
 import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
@@ -128,7 +128,7 @@ class Document(QObject):
             return
        self._set_text(highlight(text, lexer, HtmlFormatter(full=True)))
        self._set_colored(True)
-     except pygments.util.ClassNotFound:
+     except ClassNotFound:
        self._set_text(text)
        self._set_colored(False)
      except Exception, e:
