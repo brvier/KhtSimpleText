@@ -11,6 +11,7 @@ PageStackWindow {
 
     MainPage {
         id: fileBrowserPage
+        objectName: 'fileBrowserPage'
     }
 
     NewFilePage {
@@ -141,38 +142,7 @@ PageStackWindow {
         }
     }
 
-    /*Dialog {
-               id: newDialog
-               title: Label {text:'New file name :'; color: 'white'; }
-
-               content: Item {
-                   height: 100
-                   anchors {left: parent.left; right: parent.right; verticalCenter:parent.verticalCenter}
-                   TextField {
-                   id: newDialogTextField
-                   anchors {left: parent.left; right: parent.right; verticalCenter:parent.verticalCenter}
-                   maximumLength: 60
-                   height: 50
-                   focus: true
-                }
-               }
-
-                buttons: Row {
-                   anchors.horizontalCenter: parent.horizontalCenter
-                   spacing: 30
-                   Button {
-                       text: "Create";
-                       onClicked: {
-                            newDialog.accept();
-                            pageStack.push(fileEditPage, { filePath: fileBrowserPage.currentFolder + '/' +newDialogTextField.text });
-                       }
-                   }
-                   Button {
-                       anchors.topMargin: 40
-                       text: "Cancel"; onClicked: newDialog.reject()
-                   }}
-     }*/
-
+    // About Dialog
     QueryDialog {
                 id: about
                 icon: Qt.resolvedUrl('../icons/khtsimpletext.png')
@@ -184,15 +154,16 @@ PageStackWindow {
                          'Web Site : http://khertan.net/khtsimpletext'
                 }
 
-
+    //State used to detect when we should refresh view
     states: [
             State {
                         name: "fullsize-visible"
                         when: platformWindow.viewMode == WindowState.Fullsize && platformWindow.visible
                         StateChangeScript {
                                  script: {
-                                 console.log("Visibility: Fullsize and visible!");
-                                 pageStack.currentPage.refresh();
+                                 console.log('objectName:'+pageStack.currentPage.objectName);
+                                 if (pageStack.currentPage.objectName == 'fileBrowserPage') {
+                                 pageStack.currentPage.refresh();}
                                  }       }
                   }
             ]

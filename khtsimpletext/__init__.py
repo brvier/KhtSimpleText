@@ -26,7 +26,7 @@ import htmlentitydefs
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_for_filename
-from pygments.utils import ClassNotFound
+from pygments.util import ClassNotFound
 import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
@@ -45,6 +45,7 @@ class Settings(QObject):
             self.config.read(os.path.expanduser('~/.khtsimpletext.cfg'))
 
     def _write_default(self):
+        ''' Write the default config'''
         self.config.add_section('Display')
         self.config.set('Display', 'syntaxhighlighting', 'True')
         self.config.set('Display', 'textwrap', 'True')
@@ -93,15 +94,15 @@ class Document(QObject):
 
    @Slot(unicode)
    def load(self,path):
-       print 'Loading %s' % path
+       ''' Load the document from a path in a thread'''
        self._set_ready(False)
        self.thread = threading.Thread(target=self._load, args= (path, ))
        self.thread.start()
 
 
    def _load(self,path):
-        print 'Thread started'
-        self.filepath = QUrl(path).path()
+       ''' Load the document from a path '''
+ self.filepath = QUrl(path).path()
         try:
           with open(self.filepath, 'rb') as fh:
             try:
@@ -120,6 +121,7 @@ class Document(QObject):
 
 
    def _colorIt(self, text):
+     ''' Syntax highlight a text in html'''
      try:
        lexer =  get_lexer_for_filename(self.filepath)
        if lexer == None:
@@ -160,16 +162,19 @@ class Document(QObject):
 
    @Slot(unicode, result=unicode)
    def recolorIt(self, text):
+      ''' ReHighlight a text '''
       return self._colorIt(self._stripTags(text))
 
    @Slot(unicode, result=unicode)
    def previewMarkdown(self, text):
+       ''' Generate a markdown preview'''
        try:
            return markdown2.markdown(self._stripTags(text))
        except:
            return text
 
    def _stripTags(self,content):
+      ''' Remove html text formating from a text'''
       from BeautifulSoup import BeautifulSoup
       plainText = self._unescape(''.join(BeautifulSoup(content).body(text=True)))
       if (plainText.startswith('\n')):
@@ -178,6 +183,7 @@ class Document(QObject):
 
    @Slot(unicode)
    def write(self, data):
+       ''' Write the document to a file '''
        if self._colored:
           data = self._stripTags(data)
        try:
@@ -215,12 +221,13 @@ class Document(QObject):
    ready = Property(bool, _get_ready, _set_ready, notify=on_ready)
 
 class QmlDirReaderWriter(QObject):
-
+   ''' A class for manipulating file and directory from Qml'''
    def __init__(self, ):
        QObject.__init__(self)
 
    @Slot(unicode,result=bool)
    def newFolder(self,path):
+       ''' Create a new folder '''
        try:
            path = QUrl(path).path()
            os.makedirs(path)
@@ -230,6 +237,7 @@ class QmlDirReaderWriter(QObject):
 
    @Slot(unicode,unicode,unicode,result=bool)
    def rename(self,pathdir,oldname,newname):
+       ''' Rename an existing file '''
        try:
            pathdir = os.path.dirname(QUrl(pathdir).path())
            #oldpath = QUrl(oldname).path()
@@ -241,6 +249,7 @@ class QmlDirReaderWriter(QObject):
 
    @Slot(unicode,unicode,result=bool)
    def mv(self,oldpath,newpath):
+       ''' Move a file to another folder '''
        try:
            import shutil
            oldpath = QUrl(oldpath).path()
@@ -252,6 +261,7 @@ class QmlDirReaderWriter(QObject):
 
    @Slot(unicode,unicode,result=bool)
    def cp(self,oldpath,newpath):
+       ''' Copy a file '''
        try:
            import shutil
            oldpath = QUrl(oldpath).path()
@@ -263,6 +273,7 @@ class QmlDirReaderWriter(QObject):
 
    @Slot(unicode,result=bool)
    def rm(self,path):
+       ''' Delete a file or a folder '''
        try:
            path = QUrl(path).path()
            if os.path.isdir(path):
@@ -278,7 +289,7 @@ class QmlDirReaderWriter(QObject):
 
 
 class KhtSimpleText(QApplication):
-
+    ''' Application class '''
     def __init__(self):
         QApplication.__init__(self, sys.argv)
         self.setOrganizationName("Khertan Software")
@@ -300,4 +311,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())          
+    sys.exit(KhtSimpleText().exec_())           
