@@ -102,9 +102,9 @@ class Document(QObject):
        ''' Load the document from a path in a thread'''
        print 'def load:' + path
        self._set_ready(False)
-       self.thread = threading.Thread(target=self._load, args= (path, ))
-       self.thread.start()
-
+#       self.thread = threading.Thread(target=self._load, args= (path, ))
+#       self.thread.start()
+       self._load(path)
 
    def _load(self,path):
         ''' Load the document from a path '''
@@ -159,14 +159,14 @@ class Document(QObject):
                     return unichr(int(text[3:-1], 16))
                 else:
                     return unichr(int(text[2:-1]))
-            except ValueError:
-                pass
+            except ValueError, e:
+                print e
         else:
             # named entity
             try:
                 text = unichr(htmlentitydefs.name2codepoint[text[1:-1]])
-            except KeyError:
-                pass
+            except KeyError, e:
+                print e
         return text # leave as is
      return re.sub("&#?\w+;", fixup, text)
 
@@ -195,7 +195,10 @@ class Document(QObject):
    def write(self, data):
        ''' Write the document to a file '''
        if self._colored:
+          print data
           data = self._stripTags(data)
+
+
        try:
            with open(self.filepath, 'wb') as fh:
                fh.write(data.encode('utf-8'))
@@ -325,4 +328,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())                  
+    sys.exit(KhtSimpleText().exec_())  
