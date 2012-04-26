@@ -28,10 +28,13 @@ import pypackager
 __build__ = '1'
 __author__ = "Benoît HERVIER (khertan)"
 __mail__ = "khertan@khertan.net"
-__upgrade__ = '''Implement MarkDown preview
-Syntax Highlighting (not in realtime due to qml limitation)
-Fix loading of large text (But can appear frozen sometime due to qml limitations)
-Add a busy cursor when loading text'''
+__upgrade__ = '''0.4.1 : 
+* Implement MarkDown preview
+* Syntax Highlighting (not in realtime due to qml limitation)
+* Fix loading of large text (But can appear frozen sometime due to qml limitations)
+* Add a busy cursor when loading text
+0.4.2 :
+* Fix creation of new file'''
 
 if __name__ == "__main__":
     try:
