@@ -146,10 +146,11 @@ PageStackWindow {
     QueryDialog {
                 id: about
                 icon: Qt.resolvedUrl('../icons/khtsimpletext.png')
-                titleText: "About KhtSimpleText"
+                titleText: 'About KhtSimpleText'
                 message: 'Version ' + __version__ +
                          '\nBy Benoît HERVIER (Khertan)\n' +
-                         '\n\nA simple plain text editor for MeeGo and Harmattan\n' +
+                         '\nA simple plain text editor with Syntax Highlighting' +
+                         '\nfor MeeGo and Harmattan.\n' +
                          'Licenced under GPLv3\n' +
                          'Web Site : http://khertan.net/khtsimpletext'
                 }

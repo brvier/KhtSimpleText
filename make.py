@@ -30,7 +30,7 @@ __author__ = "Benoît HERVIER (khertan)"
 __mail__ = "khertan@khertan.net"
 __upgrade__ = '''Implement MarkDown preview
 Syntax Highlighting (not in realtime due to qml limitation)
-Fix loading of large text
+Fix loading of large text (But can appear frozen sometime due to qml limitations)
 Add a busy cursor when loading text'''
 
 if __name__ == "__main__":
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     p.display_name = 'KhtSimpleText'
     p.version = khtsimpletext.__version__
     p.buildversion = __build__
-    p.description="A plain text editor for Harmattan devices (n950, n9)"
+    p.description="A plain text editor for Harmattan devices (n950, n9) with basic syntax highlighting feature"
     p.upgrade_description=__upgrade__
     p.author=__author__
     p.maintainer=__author__    
@@ -80,4 +80,4 @@ chmod +x /opt/khtsimpletext/khtsimpletext_launch.py
     p["/opt"] = files
     
     print p.generate(build_binary=True,build_src=False)
-    print p.generate(build_binary=False,build_src=True) 
+    print p.generate(build_binary=False,build_src=True)   

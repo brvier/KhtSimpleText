@@ -16,6 +16,7 @@
 from PySide.QtGui import QApplication
 from PySide.QtCore import QUrl, Slot, QObject, Property, Signal
 from PySide import QtDeclarative
+from PySide.QtOpenGL import QGLWidget
 
 import threading
 import sys
@@ -23,10 +24,14 @@ import os
 import markdown2
 import re
 import htmlentitydefs
-from pygments import highlight
-from pygments.formatters import HtmlFormatter
-from pygments.lexers import get_lexer_for_filename
-from pygments.util import ClassNotFound
+try:
+  from pygments import highlight
+  from pygments.formatters import HtmlFormatter
+  from pygments.lexers import get_lexer_for_filename
+  from pygments.util import ClassNotFound
+except:
+  pass
+  
 import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
@@ -95,6 +100,7 @@ class Document(QObject):
    @Slot(unicode)
    def load(self,path):
        ''' Load the document from a path in a thread'''
+       print 'def load:' + path
        self._set_ready(False)
        self.thread = threading.Thread(target=self._load, args= (path, ))
        self.thread.start()
@@ -103,21 +109,24 @@ class Document(QObject):
    def _load(self,path):
         ''' Load the document from a path '''
         self.filepath = QUrl(path).path()
+        print 'def _load:'+self.filepath
         try:
           with open(self.filepath, 'rb') as fh:
             try:
+                text = unicode(fh.read(),'utf-8')
                 if (Settings.syntaxHighlighting):
-                    self._colorIt(unicode(fh.read(), 'utf-8'))
+                    self._colorIt(text)
                 else:
-                    self._set_text(unicode(fh.read(), 'utf-8'))
+                    self._set_text(text)
                 self._set_ready(True)
             except Exception, e:
                 print e
                 self.on_error.emit(str(e))
                 self._set_ready(True)
-        except:
+        except Exception, e:
           self._text = u''
           self._set_ready(True)
+          print e
 
 
    def _colorIt(self, text):
@@ -197,6 +206,7 @@ class Document(QObject):
        return self._text
    def _set_text(self, text):
        self._text = text
+       print 'def _set_text:' + text
        self.on_text.emit()
 
    def _get_colored(self):
@@ -297,6 +307,8 @@ class KhtSimpleText(QApplication):
         self.setApplicationName("KhtSimpleText")
 
         self.view = QtDeclarative.QDeclarativeView()
+        self.glw = QGLWidget()
+        self.view.setViewport(self.glw)
         self.aDocument = Document() 
         self.rootContext = self.view.rootContext()
         self.rootContext.setContextProperty("argv", sys.argv)
@@ -311,4 +323,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())           
+    sys.exit(KhtSimpleText().exec_())               
