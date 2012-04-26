@@ -36,7 +36,7 @@ import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 class Settings(QObject):
     '''Config object'''
@@ -124,7 +124,7 @@ class Document(QObject):
                 self.on_error.emit(str(e))
                 self._set_ready(True)
         except Exception, e:
-          self._text = u''
+          self._set_text('')
           self._set_ready(True)
           print e
 
@@ -323,4 +323,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())               
+    sys.exit(KhtSimpleText().exec_())                
