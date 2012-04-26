@@ -34,7 +34,9 @@ __upgrade__ = '''0.4.1 :
 * Fix loading of large text (But can appear frozen sometime due to qml limitations)
 * Add a busy cursor when loading text
 0.4.2 :
-* Fix creation of new file'''
+* Fix creation of new file
+* Remove threading, seems to slow donw more things a make some sync problem on signals'''
+
 
 if __name__ == "__main__":
     try:

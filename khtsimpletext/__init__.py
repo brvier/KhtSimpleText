@@ -102,9 +102,9 @@ class Document(QObject):
        ''' Load the document from a path in a thread'''
        print 'def load:' + path
        self._set_ready(False)
-#       self.thread = threading.Thread(target=self._load, args= (path, ))
-#       self.thread.start()
-       self._load(path)
+       self.thread = threading.Thread(target=self._load, args= (path, ))
+       self.thread.start()
+#       self._load(path)
 
    def _load(self,path):
         ''' Load the document from a path '''
@@ -138,16 +138,16 @@ class Document(QObject):
             self._set_text(text)
             self._set_colored(False)
             return
-       self._set_text(highlight(text, lexer, HtmlFormatter(full=True)))
        self._set_colored(True)
+       self._set_text(highlight(text, lexer, HtmlFormatter(full=True)))
      except ClassNotFound:
-       self._set_text(text)
        self._set_colored(False)
+       self._set_text(text)
      except Exception, e:
        print e
        self.on_error.emit(str(e))
-       self._set_text(text)
        self._set_colored(False)
+       self._set_text(text)
 
    def _unescape(self,text):
      def fixup(m):
@@ -328,4 +328,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())  
+    sys.exit(KhtSimpleText().exec_())    
