@@ -121,6 +121,7 @@ class Document(QObject):
                 self._set_ready(True)
             except Exception, e:
                 print e
+                self._set_text('')
                 self.on_error.emit(str(e))
                 self._set_ready(True)
         except Exception, e:
@@ -206,14 +207,15 @@ class Document(QObject):
        return self._text
    def _set_text(self, text):
        self._text = text
-       print 'def _set_text:' + text
        self.on_text.emit()
+       print 'def _set_text:' + text.split('\n')[0]
 
    def _get_colored(self):
        return self._colored
    def _set_colored(self, b):
        self._colored = b
        self.on_colored.emit()
+       print 'def _set_colored:' + str(b)
 
    def _get_ready(self):
        return self._ready
@@ -323,4 +325,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())                
+    sys.exit(KhtSimpleText().exec_())                  

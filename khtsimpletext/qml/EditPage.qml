@@ -80,15 +80,13 @@ Page {
                  id: textEditor
                  anchors.top: parent.top
                  text: Document.text
-                 height: Math.max (flick.height, implicitHeight)
+                 height: Math.max (flick.height + 4, implicitHeight)
                  width: (wrapMode == TextEdit.NoWrap) ? Math.max(flick.width +4,  textFalseEditor.paintedWidth + 28) : flick.width + 4
                  wrapMode: Document.colored ? TextEdit.NoWrap : (Settings.textWrap ? TextEdit.WordWrap : TextEdit.NoWrap);
                  inputMethodHints: Document.colored ? Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText : Qt.ImhAutoUppercase | Qt.ImhPredictiveText;
                  textFormat: TextEdit.AutoText
                  font { bold: false; family: Settings.fontFamily; pixelSize: Settings.fontSize;}
                  onTextChanged: { modified = true; }
-                 //onWidthChanged: {  console.log('WithChanged');}
-
          }
          
          onOpacityChanged: {
