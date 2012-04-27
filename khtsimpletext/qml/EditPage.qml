@@ -7,7 +7,7 @@ Page {
     tools: editTools
     id: editPage
 
-    property string filePath;
+    property string filePath : Document.filePath;
     property bool modified;
     property bool colored;
  
@@ -16,7 +16,7 @@ Page {
             console.log('FilePathChanger');
             Document.load(filePath)
             modified = false;
-            flick.returnToBounds();
+            //flick.returnToBounds();
             console.log('End filepathchanger');
             }
     }

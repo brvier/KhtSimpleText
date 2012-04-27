@@ -108,10 +108,10 @@ class Document(QObject):
 
    def _load(self,path):
         ''' Load the document from a path '''
-        self.filepath = QUrl(path).path()
-        print 'def _load:'+self.filepath
+        self._filepath = QUrl(path).path()
+        print 'def _load:'+self._filepath
         try:
-          with open(self.filepath, 'rb') as fh:
+          with open(self._filepath, 'rb') as fh:
             try:
                 text = unicode(fh.read(),'utf-8')
                 if (Settings.syntaxHighlighting):
@@ -133,7 +133,7 @@ class Document(QObject):
    def _colorIt(self, text):
      ''' Syntax highlight a text in html'''
      try:
-       lexer =  get_lexer_for_filename(self.filepath)
+       lexer =  get_lexer_for_filename(self._filepath)
        if lexer == None:
             self._set_text(text)
             self._set_colored(False)
@@ -186,7 +186,6 @@ class Document(QObject):
    def _stripTags(self,content):
       ''' Remove html text formating from a text'''
       from BeautifulSoup import BeautifulSoup
-      print content
       content = content.replace('<p style=', '<pre style')
       plainText = self._unescape(''.join(BeautifulSoup(content).body(text=True)))
       if (plainText.startswith('\n')):
@@ -210,30 +209,35 @@ class Document(QObject):
        return self._text
    def _set_text(self, text):
        self._text = text
-       self.on_text.emit()
+       self.onTextChanged.emit()
+       self.onFilepathChanged.emit()
        print 'def _set_text:' + text.split('\n')[0]
 
    def _get_colored(self):
        return self._colored
    def _set_colored(self, b):
        self._colored = b
-       self.on_colored.emit()
+       self.onColoredChanged.emit()
        print 'def _set_colored:' + str(b)
 
    def _get_ready(self):
        return self._ready
    def _set_ready(self, b):
        self._ready = b
-       self.on_ready.emit()
+       self.onReadyChanged.emit()
        
+   def _get_filepath(self):
+       return self._filepath
        
-   on_text = Signal()
+   onTextChanged = Signal()
    on_error = Signal(unicode)
-   on_colored = Signal()
-   on_ready = Signal()
-   text = Property(unicode, _get_text, _set_text, notify=on_text)
-   colored = Property(bool, _get_colored, _set_colored, notify=on_colored)
-   ready = Property(bool, _get_ready, _set_ready, notify=on_ready)
+   onColoredChanged = Signal()
+   onReadyChanged = Signal()
+   onFilepathChanged = Signal()
+   filepath = Property(unicode, _get_filepath, notify=onFilepathChanged)
+   text = Property(unicode, _get_text, _set_text, notify=onTextChanged)
+   colored = Property(bool, _get_colored, _set_colored, notify=onColoredChanged)
+   ready = Property(bool, _get_ready, _set_ready, notify=onReadyChanged)
 
 class QmlDirReaderWriter(QObject):
    ''' A class for manipulating file and directory from Qml'''
@@ -328,4 +332,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())             
+    sys.exit(KhtSimpleText().exec_())               
