@@ -36,7 +36,7 @@ import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '0.4.2'
+__version__ = '0.4.3'
 
 class Settings(QObject):
     '''Config object'''
@@ -104,7 +104,7 @@ class Document(QObject):
        self._set_ready(False)
        self.thread = threading.Thread(target=self._load, args= (path, ))
        self.thread.start()
-#       self._load(path)
+ #      self._load(path)
 
    def _load(self,path):
         ''' Load the document from a path '''
@@ -186,6 +186,8 @@ class Document(QObject):
    def _stripTags(self,content):
       ''' Remove html text formating from a text'''
       from BeautifulSoup import BeautifulSoup
+      print content
+      content = content.replace('<p style=', '<pre style')
       plainText = self._unescape(''.join(BeautifulSoup(content).body(text=True)))
       if (plainText.startswith('\n')):
         return plainText[1:]
@@ -195,13 +197,11 @@ class Document(QObject):
    def write(self, data):
        ''' Write the document to a file '''
        if self._colored:
-          print data
           data = self._stripTags(data)
-
-
        try:
            with open(self.filepath, 'wb') as fh:
                fh.write(data.encode('utf-8'))
+               print self.filepath , ' written'
        except Exception, e:
            print e
            self.on_error.emit(str(e))
@@ -328,4 +328,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())    
+    sys.exit(KhtSimpleText().exec_())             

@@ -30,4 +30,4 @@ Of course for more informations (source, bugtracker, ...) : [KhtSimpleText][7]
 [5]:http://khertan.net/medias/khtsimpletext_screenshot_2.png
 [6]:http://khertan.net/medias/khtsimpletext_screenshot_3.png
 [7]:http://khertan.net/KhtSimpleText   
-[8]:http://khertan.net/medias/khtsimpletext_screenshot_3.png
+[8]:http://khertan.net/medias/khtsimpletext_screenshot_3.png 

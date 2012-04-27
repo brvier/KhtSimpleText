@@ -10,7 +10,7 @@ Page {
     property string filePath;
     property bool modified;
     property bool colored;
-
+ 
     onFilePathChanged: {
         if (filePath !== '') {
             console.log('FilePathChanger');
@@ -23,6 +23,7 @@ Page {
 
     function exitFile() {
         modified = false;
+        filePath = '';
         pageStack.pop();
     }
 
