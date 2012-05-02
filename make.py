@@ -25,7 +25,7 @@ import socket
 import khtsimpletext
 import pypackager
 
-__build__ = '1'
+__build__ = '2'
 __author__ = "Benoît HERVIER (khertan)"
 __mail__ = "khertan@khertan.net"
 __upgrade__ = '''0.4.1 : 
@@ -35,7 +35,9 @@ __upgrade__ = '''0.4.1 :
 * Add a busy cursor when loading text
 0.4.2 :
 * Fix creation of new file
-* Remove threading, seems to slow donw more things a make some sync problem on signals'''
+* Remove threading, seems to slow donw more things and make some sync problem on signals
+0.4.3 :
+* Reactivate threading, fix removal of space bugs on syntax highlighted text, improve signals'''
 
 
 if __name__ == "__main__":
@@ -53,7 +55,7 @@ if __name__ == "__main__":
     p.author=__author__
     p.maintainer=__author__    
     p.email=__mail__
-    p.depends = "python, python-pyside.qtgui, python-pyside.qtdeclarative, python-pyside.qtcore"
+    p.depends = "python, python-pyside.qtgui, python-pyside.qtdeclarative, python-pyside.qtcore, python-pyside.qtopengl"
     p.suggests = ""
     p.section="user/office"
     p.arch="armel"
@@ -66,9 +68,7 @@ if __name__ == "__main__":
     p.maemo_flags = 'visible'
     p.meego_desktop_entry_filename = '/usr/share/applications/khtsimpletext.desktop'
     files = []
-    p.postinst = """#!/bin/sh
-chmod +x /opt/khtsimpletext/khtsimpletext_launch.py
-"""
+
 
     #Src
     srcpath = '/home/user/MyDocs/Projects/khtsimpletext/khtsimpletext'
@@ -79,7 +79,7 @@ chmod +x /opt/khtsimpletext/khtsimpletext_launch.py
         files.append(prefix)
 
     p['/usr/share/dbus-1/services'] = ['khtsimpletext.service',]
-    p['/usr/share/pixmaps'] = ['khtsimpletext.png',]
+    #p['/usr/share/pixmaps'] = ['khtsimpletext.png',] #Removed due to stupid nokia store qa rules
     p['/usr/share/icons/blanco/80x80/apps'] = ['khtsimpletext.png',]
     p['/usr/share/applications'] = ['khtsimpletext.desktop',]
     p["/opt"] = files
