@@ -25,7 +25,7 @@ import socket
 import khtsimpletext
 import pypackager
 
-__build__ = '2'
+__build__ = '1'
 __author__ = "Benoît HERVIER (khertan)"
 __mail__ = "khertan@khertan.net"
 __upgrade__ = '''0.4.1 : 
@@ -37,7 +37,9 @@ __upgrade__ = '''0.4.1 :
 * Fix creation of new file
 * Remove threading, seems to slow donw more things and make some sync problem on signals
 0.4.3 :
-* Reactivate threading, fix removal of space bugs on syntax highlighted text, improve signals'''
+* Reactivate threading, fix removal of space bugs on syntax highlighted text, improve signals
+1.0.0 :
+* Giant bump number release just to conform to nokia ovi rules'''
 
 
 if __name__ == "__main__":

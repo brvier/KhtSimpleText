@@ -36,7 +36,7 @@ import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '0.4.3'
+__version__ = '1.0.0'
 
 class Settings(QObject):
     '''Config object'''
