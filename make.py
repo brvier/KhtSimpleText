@@ -40,7 +40,8 @@ __upgrade__ = '''0.4.1 :
 * Reactivate threading, fix removal of space bugs on syntax highlighted text, improve signals
 1.0.0 :
 * Giant bump number release just to conform to nokia ovi rules'''
-
+1.0.1 : 
+* fix missing package beautifulsoup in the package dependencies
 
 if __name__ == "__main__":
     try:
@@ -57,7 +58,7 @@ if __name__ == "__main__":
     p.author=__author__
     p.maintainer=__author__    
     p.email=__mail__
-    p.depends = "python, python-pyside.qtgui, python-pyside.qtdeclarative, python-pyside.qtcore, python-pyside.qtopengl"
+    p.depends = "python, python-pyside.qtgui, python-pyside.qtdeclarative, python-pyside.qtcore, python-pyside.qtopengl, python-beautifulsoup"
     p.suggests = ""
     p.section="user/office"
     p.arch="armel"
