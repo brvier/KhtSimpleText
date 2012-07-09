@@ -39,9 +39,9 @@ __upgrade__ = '''0.4.1 :
 0.4.3 :
 * Reactivate threading, fix removal of space bugs on syntax highlighted text, improve signals
 1.0.0 :
-* Giant bump number release just to conform to nokia ovi rules'''
+* Giant bump number release just to conform to nokia ovi rules
 1.0.1 : 
-* fix missing package beautifulsoup in the package dependencies
+* fix missing package beautifulsoup in the package dependencies'''
 
 if __name__ == "__main__":
     try:
