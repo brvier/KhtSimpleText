@@ -116,7 +116,7 @@ class Document(QObject):
           with codecs.open(self._filepath, 'r','utf_8') as fh:
             try:
                 text = fh.read()
-                if text.find('\0'):
+                if text.find('\0') > 0:
                     print 'Probably utf-16 ... decode it to utf-8 as qml didn t support it well'
                     text = text.decode('utf-16')
 
