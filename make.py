@@ -28,7 +28,7 @@ import pypackager
 __build__ = '1'
 __author__ = "Benoît HERVIER (khertan)"
 __mail__ = "khertan@khertan.net"
-__upgrade__ = '''0.4.1 : 
+__upgrade__ = '''0.4.1 :
 * Implement MarkDown preview
 * Syntax Highlighting (not in realtime due to qml limitation)
 * Fix loading of large text (But can appear frozen sometime due to qml limitations)
@@ -40,8 +40,10 @@ __upgrade__ = '''0.4.1 :
 * Reactivate threading, fix removal of space bugs on syntax highlighted text, improve signals
 1.0.0 :
 * Giant bump number release just to conform to nokia ovi rules
-1.0.1 : 
-* fix missing package beautifulsoup in the package dependencies'''
+1.0.1 :
+* fix missing package beautifulsoup in the package dependencies
+1.1.0 :
+* fix reading of highlighting setting, and add support for decoding utf-16 file'''
 
 if __name__ == "__main__":
     try:
@@ -56,7 +58,7 @@ if __name__ == "__main__":
     p.description="A plain text editor for Harmattan devices (n950, n9) with basic syntax highlighting feature"
     p.upgrade_description=__upgrade__
     p.author=__author__
-    p.maintainer=__author__    
+    p.maintainer=__author__
     p.email=__mail__
     p.depends = "python, python-pyside.qtgui, python-pyside.qtdeclarative, python-pyside.qtcore, python-pyside.qtopengl, python-beautifulsoup"
     p.suggests = ""
@@ -86,6 +88,6 @@ if __name__ == "__main__":
     p['/usr/share/icons/blanco/80x80/apps'] = ['khtsimpletext.png',]
     p['/usr/share/applications'] = ['khtsimpletext.desktop',]
     p["/opt"] = files
-    
+
     print p.generate(build_binary=True,build_src=False)
-    print p.generate(build_binary=False,build_src=True)   
+    print p.generate(build_binary=False,build_src=True)

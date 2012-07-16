@@ -31,16 +31,16 @@ try:
   from pygments.util import ClassNotFound
 except:
   pass
-  
+
 import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '1.0.1'
+__version__ = '1.1.0'
 
 class Settings(QObject):
     '''Config object'''
-    
+
     def __init__(self,):
         QObject.__init__(self,)
         self.config = ConfigParser.ConfigParser()
@@ -60,14 +60,14 @@ class Settings(QObject):
         # Writing our configuration file to 'example.cfg'
         with open(os.path.expanduser('~/.khtsimpletext.cfg'), 'wb') as configfile:
             self.config.write(configfile)
-    
+
     @Slot(unicode, result=unicode)
     def get(self,option):
         try:
             return self.config.get('Display',option)
         except:
             return ''
-    
+
     def _get_textWrap(self,):
         return (self.get('textwrap').lower() == 'true')
     def _get_fontSize(self,):
@@ -75,8 +75,8 @@ class Settings(QObject):
     def _get_fontFamily(self,):
         return self.get('fontfamily')
     def _get_syntaxHighlighting(self,):
-        return (self.get('syntaxhighlighting').lower() == 'True')
-        
+        return (self.get('syntaxhighlighting').lower() == 'true')
+
     on_textWrap = Signal()
     on_fontSize = Signal()
     on_fontFamily = Signal()
@@ -85,7 +85,7 @@ class Settings(QObject):
     fontSize = Property(int, _get_fontSize, notify=on_fontSize)
     fontFamily = Property(unicode, _get_fontFamily, notify=on_fontFamily)
     syntaxHighlighting = Property(bool, _get_syntaxHighlighting, notify=on_syntaxHighlighting)
-    
+
 class Document(QObject):
    '''Represent the text document'''
 
@@ -108,19 +108,26 @@ class Document(QObject):
 
    def _load(self,path):
         ''' Load the document from a path '''
+        import codecs
         self._filepath = QUrl(path).path()
         print 'def _load:'+self._filepath
+
         try:
-          with open(self._filepath, 'rb') as fh:
+          with codecs.open(self._filepath, 'r','utf_8') as fh:
             try:
-                text = unicode(fh.read(),'utf-8')
-                if (Settings.syntaxHighlighting):
+                text = fh.read()
+                if text.find('\0'):
+                    print 'Probably utf-16 ... decode it to utf-8 as qml didn t support it well'
+                    text = text.decode('utf-16')
+
+                if (Settings.syntaxHighlighting == True):
+                    print 'Syntax highlighting Enabled'
                     self._colorIt(text)
                 else:
                     self._set_text(text)
                 self._set_ready(True)
             except Exception, e:
-                print e
+                print type(e),e
                 self._set_text('')
                 self.on_error.emit(str(e))
                 self._set_ready(True)
@@ -225,10 +232,10 @@ class Document(QObject):
    def _set_ready(self, b):
        self._ready = b
        self.onReadyChanged.emit()
-       
+
    def _get_filepath(self):
        return self._filepath
-       
+
    onTextChanged = Signal()
    on_error = Signal(unicode)
    onColoredChanged = Signal()
@@ -318,7 +325,7 @@ class KhtSimpleText(QApplication):
         self.view = QtDeclarative.QDeclarativeView()
         self.glw = QGLWidget()
         self.view.setViewport(self.glw)
-        self.aDocument = Document() 
+        self.aDocument = Document()
         self.rootContext = self.view.rootContext()
         self.rootContext.setContextProperty("argv", sys.argv)
         self.rootContext.setContextProperty("__version__", __version__)
@@ -332,4 +339,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())               
+    sys.exit(KhtSimpleText().exec_())

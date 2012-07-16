@@ -88,6 +88,7 @@ Page {
                  textFormat: TextEdit.AutoText
                  font { bold: false; family: Settings.fontFamily; pixelSize: Settings.fontSize;}
                  onTextChanged: { modified = true; }
+                 opacity: 1.0
          }
          
          onOpacityChanged: {
