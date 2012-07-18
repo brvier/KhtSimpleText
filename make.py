@@ -44,7 +44,8 @@ __upgrade__ = '''0.4.1 :
 * fix missing package beautifulsoup in the package dependencies
 1.1.0 :
 * fix reading of highlighting setting, and add support for decoding utf-16 file
-1.1.1: fix the 1.1.0 fix :)'''
+1.1.1: fix the 1.1.0 fix :)
+1.1.2: fix the 1.1.1 fix :p'''
 
 if __name__ == "__main__":
     try:

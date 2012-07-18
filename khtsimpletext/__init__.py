@@ -36,7 +36,7 @@ import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '1.1.1'
+__version__ = '1.1.2'
 
 class Settings(QObject):
     '''Config object'''
@@ -120,7 +120,7 @@ class Document(QObject):
                     print 'Probably utf-16 ... decode it to utf-8 as qml didn t support it well'
                     text = text.decode('utf-16')
 
-                if (Settings.syntaxHighlighting == True):
+                if (Settings.syntaxHighlighting):
                     print 'Syntax highlighting Enabled'
                     self._colorIt(text)
                 else:
