@@ -84,6 +84,10 @@ PageStackWindow {
                        pageStack.push(newFolderPage, {filePath: fileBrowserPage.currentFolder});
                        }
             }
+            MenuItem { text: qsTr("Report a bug");onClicked: {
+                       Qt.openUrlExternally('https://github.com/khertan/KhtSimpleText/issues/new');
+                       }
+            }
             /*MenuItem { text: qsTr("Preferences"); onClicked: notYetAvailableBanner.show(); }*/
         }
     }
