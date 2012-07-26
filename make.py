@@ -75,9 +75,10 @@ if __name__ == "__main__":
     p.changelog =  p.upgrade_description
     p.maemo_flags = 'visible'
     p.meego_desktop_entry_filename = '/usr/share/applications/khtsimpletext.desktop'
+    p.createDigsigsums = True
     files = []
     p.postinst = '''#!/bin/sh
-chmod /opt/khtsimpletext/__init__.py'''
+chmod +x /opt/khtsimpletext/__init__.py'''
 
 
     #Src
