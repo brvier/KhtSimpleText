@@ -45,7 +45,8 @@ __upgrade__ = '''0.4.1 :
 1.1.0 :
 * fix reading of highlighting setting, and add support for decoding utf-16 file
 1.1.1: fix the 1.1.0 fix :)
-1.1.2: fix the 1.1.1 fix :p'''
+1.1.2: fix the 1.1.1 fix :p
+1.1.3: Deal a problrm with harmattan invoker'''
 
 if __name__ == "__main__":
     try:
@@ -75,6 +76,8 @@ if __name__ == "__main__":
     p.maemo_flags = 'visible'
     p.meego_desktop_entry_filename = '/usr/share/applications/khtsimpletext.desktop'
     files = []
+    p.postinst = '''#!/bin/sh
+chmod /opt/khtsimpletext/__init__.py'''
 
 
     #Src
