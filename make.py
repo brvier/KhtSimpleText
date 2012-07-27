@@ -15,12 +15,7 @@
 
 import os
 import sys
-import shutil
-import time
-import string
 from glob import glob
-from datetime import datetime
-import socket
 
 import khtsimpletext
 import pypackager
@@ -46,7 +41,7 @@ __upgrade__ = '''0.4.1 :
 * fix reading of highlighting setting, and add support for decoding utf-16 file
 1.1.1: fix the 1.1.0 fix :)
 1.1.2: fix the 1.1.1 fix :p
-1.1.3: Deal a problrm with harmattan invoker'''
+1.1.3: Deal a problem with harmattan invoker'''
 
 if __name__ == "__main__":
     try:
@@ -82,18 +77,23 @@ chmod +x /opt/khtsimpletext/__init__.py'''
 
 
     #Src
-    srcpath = '/home/user/MyDocs/Projects/khtsimpletext/khtsimpletext'
-    for root, dirs, fs in os.walk(srcpath):
+    #Src
+    for root, dirs, fs in os.walk(os.path.join(os.path.dirname(__file__), p.name)):
       for f in fs:
-        prefix = os.path.relpath(os.path.join(root,f),(os.path.dirname(srcpath)))
-        print root, prefix
-        files.append(prefix)
+        files.append(os.path.join(root, f))
 
+        
     p['/usr/share/dbus-1/services'] = ['khtsimpletext.service',]
     #p['/usr/share/pixmaps'] = ['khtsimpletext.png',] #Removed due to stupid nokia store qa rules
     p['/usr/share/icons/blanco/80x80/apps'] = ['khtsimpletext.png',]
     p['/usr/share/applications'] = ['khtsimpletext.desktop',]
     p["/opt"] = files
 
-    print p.generate(build_binary=True,build_src=False)
-    print p.generate(build_binary=False,build_src=True)
+    print p.generate(build_binary=True,build_src=True)
+    if not os.path.exists('dists'):
+        os.mkdir('dists')
+    for filepath in glob(p.name+'_'+p.version+'-'+p.buildversion+'*'):
+        os.rename(filepath, os.path.join(os.path.dirname(filepath), 'dists', os.path.basename(filepath)))
+
+
+
