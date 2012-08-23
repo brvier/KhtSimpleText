@@ -73,16 +73,17 @@ Page {
          clip: true
 
          contentWidth: textEditor.width
-         contentHeight: textEditor.implicitHeight
+         contentHeight: textEditor.height
          pressDelay: 200
 
 
-             TextArea {
+             KhtTextArea {
                  id: textEditor
                  anchors.top: parent.top
+                 anchors.left: parent.left
                  text: Document.text
-                 height: Math.max (flick.height + 4, implicitHeight)
-                 width: (wrapMode == TextEdit.NoWrap) ? Math.max(flick.width +4,  textFalseEditor.paintedWidth + 28) : flick.width + 4
+                 height: paintedHeight + 28
+                 width: paintedWidth + 28
                  wrapMode: Document.colored ? TextEdit.NoWrap : (Settings.textWrap ? TextEdit.WordWrap : TextEdit.NoWrap);
                  inputMethodHints: Document.colored ? Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText : Qt.ImhAutoUppercase | Qt.ImhPredictiveText;
                  textFormat: TextEdit.AutoText
@@ -96,15 +97,6 @@ Page {
          }
      }
 
-         TextEdit {
-             id:textFalseEditor
-             text: Document.text
-             font: textEditor.font
-             textFormat: textEditor.textFormat
-             wrapMode: textEditor.wrapMode
-             opacity: 0.0
-             }
-
     ScrollDecorator {
         flickableItem: flick
         platformStyle: ScrollDecoratorStyle {
@@ -114,7 +106,7 @@ Page {
         id: editMenu
         visualParent: pageStack
         MenuLayout {
-            MenuItem { text: qsTr("About"); onClicked: about.open()}
+            MenuItem { text: qsTr("About"); onClicked: pushAbout()}
             MenuItem { text: qsTr("MarkDown Preview"); onClicked: pageStack.push(previewPage, {atext:textEditor.text}); }
             MenuItem { text: qsTr("ReHighlight Text"); onClicked:{ Document.recolorIt(textEditor.text);} }
             MenuItem { text: qsTr("Save"); onClicked: saveFile()}

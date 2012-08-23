@@ -75,7 +75,7 @@ PageStackWindow {
         id: myMenu
         visualParent: pageStack
         MenuLayout {
-            MenuItem { text: qsTr("About"); onClicked: about.open()}
+            MenuItem { text: qsTr("About"); onClicked: pushAbout()}
             MenuItem { text: qsTr("New File"); onClicked: {
                        pageStack.push(newFilePage, {filePath: fileBrowserPage.currentFolder});
                        }
@@ -147,7 +147,7 @@ PageStackWindow {
     }
 
     // About Dialog
-    QueryDialog {
+    /*QueryDialog {
                 id: about
                 icon: Qt.resolvedUrl('../icons/khtsimpletext.png')
                 titleText: 'About KhtSimpleText'
@@ -157,7 +157,25 @@ PageStackWindow {
                          '\nfor MeeGo and Harmattan.\n' +
                          'Licenced under GPLv3\n' +
                          'Web Site : http://khertan.net/khtsimpletext'
-                }
+                }*/
+
+    function pushAbout() {
+        pageStack.push(Qt.createComponent(Qt.resolvedUrl("components/AboutPage.qml")),
+             {
+                          title : 'KhtSimpleText ' + __version__,
+                          iconSource: Qt.resolvedUrl('../icons/khtsimpletext.png'),
+                          slogan : 'Code everywhere !',
+                          text : 
+                             'A simple plain text editor with Syntax Highlighting.' +
+                             '\nWeb Site : http://khertan.net/khtsimpletext' +
+                             '\n\nBy Benoît HERVIER (Khertan)' +
+                             '\nLicenced under GPLv3' +
+                             '\n\nReport bugs on http://github.com/khertan/KhtSimpleText/Issues' /*+
+                             '\n\nThanks to : ' +
+                             '\nRadek Novacek'*/
+             }
+             );
+    }                
 
     //State used to detect when we should refresh view
     states: [

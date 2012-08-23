@@ -41,7 +41,9 @@ __upgrade__ = '''0.4.1 :
 * fix reading of highlighting setting, and add support for decoding utf-16 file
 1.1.1: fix the 1.1.0 fix :)
 1.1.2: fix the 1.1.1 fix :p
-1.1.3: Deal a problem with harmattan invoker'''
+1.1.3: Deal a problem with harmattan invoker
+1.1.4: Fix packaging
+1.2.0: Improve text flickering and ensure new written text visible on horizontal flickering (Fork and improve qml qt component TextArea'''
 
 if __name__ == "__main__":
     try:
@@ -82,7 +84,7 @@ chmod +x /opt/khtsimpletext/__init__.py'''
       for f in fs:
         files.append(os.path.join(root, f))
 
-        
+
     p['/usr/share/dbus-1/services'] = ['khtsimpletext.service',]
     #p['/usr/share/pixmaps'] = ['khtsimpletext.png',] #Removed due to stupid nokia store qa rules
     p['/usr/share/icons/blanco/80x80/apps'] = ['khtsimpletext.png',]
