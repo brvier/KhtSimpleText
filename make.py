@@ -20,7 +20,7 @@ from glob import glob
 import khtsimpletext
 import pypackager
 
-__build__ = '1'
+__build__ = '2'
 __author__ = "Benoît HERVIER (khertan)"
 __mail__ = "khertan@khertan.net"
 __upgrade__ = '''0.4.1 :
@@ -75,7 +75,9 @@ if __name__ == "__main__":
     p.createDigsigsums = True
     files = []
     p.postinst = '''#!/bin/sh
-chmod +x /opt/khtsimpletext/__init__.py'''
+echo "Giving permissions for apps to execute"
+chmod +x /opt/khtsimpletext/__init__.py
+exit 0'''
 
 
     #Src
