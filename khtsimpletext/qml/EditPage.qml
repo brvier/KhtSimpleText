@@ -106,8 +106,10 @@ Page {
         MenuLayout {
             MenuItem { text: qsTr("About"); onClicked: pushAbout()}
             MenuItem { text: qsTr("MarkDown Preview"); onClicked: {
+                var atext = Document.previewMarkdown(textEditor.text);
+                console.log(atext);
                 var previewPage = Qt.createComponent(Qt.resolvedUrl("PreviewPage.qml"));
-                pageStack.push(previewPage, {atext:textEditor.text}); }
+                pageStack.push(previewPage, {atext:atext}); }
             }
             MenuItem { text: qsTr("ReHighlight Text"); onClicked:{ Document.recolorIt(textEditor.text);} }
             MenuItem { text: qsTr("Save"); onClicked: saveFile()}

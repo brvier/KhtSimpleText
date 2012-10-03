@@ -17,7 +17,7 @@ from PySide.QtCore import Slot, QObject, Property, Signal
 
 import threading
 import os
-import markdown2
+from  markdown import markdown
 import re
 import htmlentitydefs
 try:
@@ -156,14 +156,14 @@ class Document(QObject):
     def previewMarkdown(self, text):
         ''' Generate a markdown preview'''
         try:
-            return markdown2.markdown(self._stripTags(text))
+            return markdown(_stripTags(text), extensions = ['nl2br', ])
         except:
             return text
 
     @Slot(unicode)
     def write(self, data):
         ''' Write the document to a file '''
-        data = self._stripTags(data)
+        data = _stripTags(data)
         try:
             with open(self.filepath, 'wb') as fh:
                 fh.write(data.encode('utf-8'))
