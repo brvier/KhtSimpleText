@@ -13,28 +13,26 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-from PySide.QtGui import QApplication
-from PySide.QtCore import QUrl, Slot, QObject, Signal, \
-                          QAbstractListModel, QModelIndex, \
-                          Property
-from PySide import QtDeclarative
-from PySide.QtOpenGL import QGLWidget
+from PySide.QtCore import Slot, Signal, \
+    QAbstractListModel, QModelIndex, \
+    Property
 
-import sys
 import os
 import os.path
 
 from document import Document
 
-class DocumentsModel(QAbstractListModel):
-    COLUMNS = ('filename', 'index', 'data', 'filepath', 'isdir', 'ready', 'document')
 
-    def __init__(self, parent=None):
+class DocumentsModel(QAbstractListModel):
+    COLUMNS = ('filename', 'index', 'data',
+               'filepath', 'isdir', 'ready', 'document')
+
+    def __init__(self, currentDoc=None):
         self._documents = {}
         self._currentPath = u'/home/user/'
         QAbstractListModel.__init__(self)
         self.setRoleNames(dict(enumerate(DocumentsModel.COLUMNS)))
-        self.parent = parent
+        self.currentDoc = currentDoc
 
     @Slot()
     def loadDir(self, ):
@@ -46,33 +44,33 @@ class DocumentsModel(QAbstractListModel):
         self._sortData()
 
     def _sortData(self,):
-        self._documents.sort(key=lambda document: (document.filename, )
-                                         , reverse=False)
+        self._documents.sort(key=lambda document: (document.filename, ),
+                             reverse=False)
 
     def rowCount(self, parent=QModelIndex()):
         return len(self._documents)
 
     def data(self, index, role):
         if index.isValid() \
-            and role == DocumentsModel.COLUMNS.index('filename'):
+                and role == DocumentsModel.COLUMNS.index('filename'):
             return self._documents[index.row()].filename
         elif index.isValid() \
-            and role == DocumentsModel.COLUMNS.index('index'):
+                and role == DocumentsModel.COLUMNS.index('index'):
             return index.row()
         elif index.isValid() \
-            and role == DocumentsModel.COLUMNS.index('data'):
+                and role == DocumentsModel.COLUMNS.index('data'):
             return self._documents[index.row()].data
         elif index.isValid() \
-            and role == DocumentsModel.COLUMNS.index('filepath'):
+                and role == DocumentsModel.COLUMNS.index('filepath'):
             return self._documents[index.row()].filepath
         elif index.isValid() \
-            and role == DocumentsModel.COLUMNS.index('isdir'):
+                and role == DocumentsModel.COLUMNS.index('isdir'):
             return self._documents[index.row()].isdir
         elif index.isValid() \
-            and role == DocumentsModel.COLUMNS.index('ready'):
+                and role == DocumentsModel.COLUMNS.index('ready'):
             return self._documents[index.row()].ready
         elif index.isValid() \
-            and role == DocumentsModel.COLUMNS.index('document'):
+                and role == DocumentsModel.COLUMNS.index('document'):
             return self._documents[index.row()]
         return None
 
@@ -91,11 +89,6 @@ class DocumentsModel(QAbstractListModel):
         self.endResetModel()
 
     @Slot(int)
-    def loadDocument(self, idx):
-        self._documents[idx].load()
-        self.parent.document = self._documents[idx]
-
-    @Slot(int)
     def remove(self, idx):
         self.beginResetModel()
         self._documents[idx].delete()
@@ -111,9 +104,7 @@ class DocumentsModel(QAbstractListModel):
         self.onCurrentpathChanged.emit()
         self.reload()
 
-
     onCurrentpathChanged = Signal()
 
     currentpath = Property(unicode, _get_currentpath,
                            _set_currentpath, notify=onCurrentpathChanged)
-

@@ -16,7 +16,7 @@ Page {
     }
 
     function saveFile() {
-        DocumentsModel.writeDocument(index, textEditor.text);
+        Document.write(textEditor.text);
     }
 
     QueryDialog {
@@ -33,20 +33,20 @@ Page {
         PageHeader {
          id: header
          title: 'KhtSimpleText'
-         subtitle: Common.beautifulPath(DocumentsModel.currentDocumentFilepath);
+         subtitle: Common.beautifulPath(Document.filepath);
     }
 
      BusyIndicator {
         id: busyindicator
         platformStyle: BusyIndicatorStyle { size: "large" }
-        running: DocumentsModel.currentDocumentReady ? false : true;
-        opacity: DocumentsModel.currentDocumentReady ? 0.0 : 1.0;
+        running: Document.ready ? false : true;
+        opacity: Document.ready ? 0.0 : 1.0;
         anchors.centerIn: parent
     }
 
     Flickable {
          id: flick
-         opacity: DocumentsModel.currentDocumentReady ? 1.0 : 0.0
+         opacity: Document.ready ? 1.0 : 0.0
          flickableDirection: Flickable.HorizontalAndVerticalFlick
          //boundsBehavior: Flickable.DragOverBounds
          anchors.top: header.bottom
@@ -69,8 +69,8 @@ Page {
                  anchors.top: parent.top
                  anchors.left: parent.left
                  text: Document.data
-                 height: paintedHeight + 28
-                 width: paintedWidth + 28
+                 height: Math.max(paintedHeight + 28, flick.height)
+                 width: Math.max(paintedWidth + 28, flick.width)
                  wrapMode: TextEdit.NoWrap
                  inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                  textFormat: TextEdit.AutoText
@@ -83,7 +83,7 @@ Page {
             interval: 10000
             onTriggered:{
                 var index = textEditor.cursorPosition;
-                textEditor.text = DocumentsModel.recolorIt(textEditor.text);
+                Document.recolorIt(textEditor.text);
                 textEditor.cursorPosition = index;
             } 
             
@@ -105,8 +105,11 @@ Page {
         visualParent: pageStack
         MenuLayout {
             MenuItem { text: qsTr("About"); onClicked: pushAbout()}
-            MenuItem { text: qsTr("MarkDown Preview"); onClicked: pageStack.push(previewPage, {atext:textEditor.text}); }
-            MenuItem { text: qsTr("ReHighlight Text"); onClicked:{ textEditor.text = DocumentsModel.recolorIt(textEditor.text);} }
+            MenuItem { text: qsTr("MarkDown Preview"); onClicked: {
+                var previewPage = Qt.createComponent(Qt.resolvedUrl("PreviewPage.qml"));
+                pageStack.push(previewPage, {atext:textEditor.text}); }
+            }
+            MenuItem { text: qsTr("ReHighlight Text"); onClicked:{ Document.recolorIt(textEditor.text);} }
             MenuItem { text: qsTr("Save"); onClicked: saveFile()}
             /*MenuItem { text: qsTr("Preferences"); onClicked: notYetAvailableBanner.show(); }*/
         }

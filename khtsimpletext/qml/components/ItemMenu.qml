@@ -12,15 +12,24 @@ Menu {
     MenuLayout {
         MenuItem {
             text: qsTr("Copy")
-            onClicked: pageStack.push(copyFilePage, { filePath: filePath, fileName: fileName });
+            onClicked: {
+                var copyFilePage = Qt.createComponent(Qt.resolvedUrl("CopyFilePage.qml"));
+                pageStack.push(copyFilePage, { filePath: filePath, fileName: fileName });
+            }
         }
         MenuItem {
             text: qsTr("Move")
-            onClicked: pageStack.push(moveFilePage, { filePath: filePath, fileName: fileName });
+            onClicked: {
+                var moveFilePage = Qt.createComponent(Qt.resolvedUrl("MoveFilePage.qml"));
+                pageStack.push(moveFilePage, { filePath: filePath, fileName: fileName });
+            }
         }
         MenuItem {
             text: qsTr("Rename")
-            onClicked: pageStack.push(renameFilePage, { filePath: filePath, fileName: fileName });
+            onClicked: {
+                var renameFilePage = Qt.createComponent(Qt.resolvedUrl("RenameFilePage.qml"));
+                pageStack.push(renameFilePage, { filePath: filePath, fileName: fileName });
+            }
         }
         MenuItem {
             text: qsTr("Delete")

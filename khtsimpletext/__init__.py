@@ -103,7 +103,7 @@ class KhtSimpleText(QApplication):
         self.glw = QGLWidget()
         self.view.setViewport(self.glw)
         self.document = Document('~')
-        self.documentsModel= DocumentsModel(parent=self)
+        self.documentsModel= DocumentsModel(currentDoc=self.document)
 
         self.rootContext = self.view.rootContext()
         self.rootContext.setContextProperty("argv", sys.argv)

@@ -94,10 +94,11 @@ Page {
                             DocumentsModel.currentpath  = filepath
                         }
                         else {
-                            DocumentsModel.loadDocument(index)        
                             var editingPage = Qt.createComponent(Qt.resolvedUrl("EditPage.qml"));
-                            pageStack.push(editingPage, {index: index,
-                                                                                     modified: false});
+                            Document.filepath = filepath;
+                            Document.load();
+                            pageStack.push(editingPage, {index: index, 
+                                                         modified: false});
                         }
                     }
                     onPressAndHold: {

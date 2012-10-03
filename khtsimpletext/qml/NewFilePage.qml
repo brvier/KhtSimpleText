@@ -41,7 +41,11 @@ Page {
             enabled: inputField.text != ""
             text: "Create file"
             onClicked: {
-                pageStack.replace(fileEditPage, { filePath: filePath + '/' +inputField.text });
+                var editingPage = Qt.createComponent(Qt.resolvedUrl("EditPage.qml"));
+                Document.filepath = filepath;
+                Document.load();
+                pageStack.replace(editingPage, {index: -1, 
+                             modified: false});
             }
         }
     }

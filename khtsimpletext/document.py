@@ -21,35 +21,38 @@ import markdown2
 import re
 import htmlentitydefs
 try:
-  from pygments import highlight
-  from pygments.formatters import HtmlFormatter
-  from pygments.lexers import get_lexer_for_filename
-  from pygments.util import ClassNotFound
+    from pygments import highlight
+    from pygments.formatters import HtmlFormatter
+    from pygments.lexers import get_lexer_for_filename
+    from pygments.util import ClassNotFound
 except:
-  pass
+    pass
+
 
 def _stripTags(text):
     ''' Remove html text formating from a text'''
     from BeautifulSoup import BeautifulSoup
-    plainText = _unescape(''.join( \
-        BeautifulSoup( \
-            text.replace('<p style=', '<pre style')) \
-            .body(text=True)))
+    plainText = _unescape(''.join(
+        BeautifulSoup(
+            text.replace('<p style=', '<pre style'))
+        .body(text=True)))
     if (plainText.startswith('\n')):
         return plainText[1:]
     return plainText
 
+
 def _colorIt(text, filepath):
     ''' Syntax highlight a text in html'''
     try:
-        lexer =  get_lexer_for_filename(filepath)
-        if lexer == None:
+        lexer = get_lexer_for_filename(filepath)
+        if lexer is None:
             return (text, None)
         return (highlight(text, lexer, HtmlFormatter(full=True)), None)
     except ClassNotFound:
         return (text, None)
     except Exception, err:
         return (text, err)
+
 
 def _unescape(text):
     ''' Unescape a text '''
@@ -70,7 +73,7 @@ def _unescape(text):
                 text = unichr(htmlentitydefs.name2codepoint[text[1:-1]])
             except KeyError:
                 pass
-        return text # leave as is
+        return text  # leave as is
     return re.sub("&#?\w+;", fixup, text)
 
 
@@ -81,31 +84,34 @@ class Document(QObject):
         self._filepath = os.path.realpath(filepath)
         self._isdir = os.path.isdir(filepath)
         self._data = None
-        print 'Debug: filepath: %s' % filepath
+        self._ready = False
 
     def _get_isdir(self,):
         return self._isdir
 
     def _get_filename(self,):
         return self._filename
+
     def _set_filename(self, value):
         self._filename = value
-        self.onFilename.emit()
+        self.onFilenameChanged.emit()
 
     def _get_filepath(self,):
         return self._filepath
+
     def _set_filepath(self, value):
         self._filepath = value
         self._set_filename(os.path.basename(value))
-        self.onFilePathChanged.emit()
+        self.onFilepathChanged.emit()
 
     def _get_data(self,):
         return self._data
+
     def _set_data(self, value):
         self._data = value
         self.onDataChanged.emit()
 
-    @Slot(unicode)
+    @Slot()
     def load(self,):
         ''' Load the document from a path in a thread'''
         self._set_ready(False)
@@ -115,15 +121,15 @@ class Document(QObject):
     def _load(self, ):
         ''' Load the document from a path '''
         import codecs
-
         try:
-            with codecs.open(self._filepath, 'r','utf_8') as fh:
+            with codecs.open(self._filepath, 'r', 'utf_8') as fh:
                 try:
                     text = fh.read()
                     if text.find('\0') > 0:
                         text = text.decode('utf-16')
                     text, err = _colorIt(text, self._filepath)
-                    if err: raise err
+                    if err:
+                        raise err
                     self._set_data(text)
                     self._set_ready(True)
                 except Exception, err:
@@ -167,6 +173,7 @@ class Document(QObject):
 
     def _get_ready(self):
         return self._ready
+
     def _set_ready(self, value):
         self._ready = value
         self.onReadyChanged.emit()
@@ -181,9 +188,8 @@ class Document(QObject):
     filepath = Property(unicode, _get_filepath,
                         _set_filepath, notify=onFilepathChanged)
     data = Property(unicode, _get_data,
-                        _set_data, notify=onDataChanged)
+                    _set_data, notify=onDataChanged)
 
     onError = Signal(unicode)
     onReadyChanged = Signal()
     ready = Property(bool, _get_ready, _set_ready, notify=onReadyChanged)
-
