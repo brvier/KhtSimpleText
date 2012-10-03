@@ -7,29 +7,16 @@ Page {
     tools: editTools
     id: editPage
 
-    property string filePath : Document.filePath;
+    property int index
     property bool modified;
-    property bool colored;
- 
-    onFilePathChanged: {
-        if (filePath !== '') {
-            console.log('FilePathChanger');
-            Document.load(filePath)
-            modified = false;
-            //flick.returnToBounds();
-            console.log('End filepathchanger');
-            }
-    }
 
     function exitFile() {
         modified = false;
-        filePath = '';
         pageStack.pop();
     }
 
     function saveFile() {
-        Document.write(textEditor.text);
-        modified = false;
+        DocumentsModel.writeDocument(index, textEditor.text);
     }
 
     QueryDialog {
@@ -46,20 +33,20 @@ Page {
         PageHeader {
          id: header
          title: 'KhtSimpleText'
-         subtitle: Common.beautifulPath(filePath);
+         subtitle: Common.beautifulPath(DocumentsModel.currentDocumentFilepath);
     }
 
      BusyIndicator {
         id: busyindicator
         platformStyle: BusyIndicatorStyle { size: "large" }
-        running: Document.ready ? false : true;
-        opacity: Document.ready ? 0.0 : 1.0;
+        running: DocumentsModel.currentDocumentReady ? false : true;
+        opacity: DocumentsModel.currentDocumentReady ? 0.0 : 1.0;
         anchors.centerIn: parent
     }
 
     Flickable {
          id: flick
-         opacity: Document.ready ? 1.0 : 0.0
+         opacity: DocumentsModel.currentDocumentReady ? 1.0 : 0.0
          flickableDirection: Flickable.HorizontalAndVerticalFlick
          //boundsBehavior: Flickable.DragOverBounds
          anchors.top: header.bottom
@@ -81,16 +68,27 @@ Page {
                  id: textEditor
                  anchors.top: parent.top
                  anchors.left: parent.left
-                 text: Document.text
+                 text: Document.data
                  height: paintedHeight + 28
                  width: paintedWidth + 28
-                 wrapMode: Document.colored ? TextEdit.NoWrap : (Settings.textWrap ? TextEdit.WordWrap : TextEdit.NoWrap);
-                 inputMethodHints: Document.colored ? Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText : Qt.ImhAutoUppercase | Qt.ImhPredictiveText;
+                 wrapMode: TextEdit.NoWrap
+                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                  textFormat: TextEdit.AutoText
                  font { bold: false; family: Settings.fontFamily; pixelSize: Settings.fontSize;}
-                 onTextChanged: { modified = true; }
+                 onTextChanged: { modified = true; autoTimer.restart() }
                  opacity: 1.0
          }
+         Timer {
+            id: autoTimer
+            interval: 10000
+            onTriggered:{
+                var index = textEditor.cursorPosition;
+                textEditor.text = DocumentsModel.recolorIt(textEditor.text);
+                textEditor.cursorPosition = index;
+            } 
+            
+         }
+
          
          onOpacityChanged: {
            if (flick.opacity == 1.0) modified = false;
@@ -108,7 +106,7 @@ Page {
         MenuLayout {
             MenuItem { text: qsTr("About"); onClicked: pushAbout()}
             MenuItem { text: qsTr("MarkDown Preview"); onClicked: pageStack.push(previewPage, {atext:textEditor.text}); }
-            MenuItem { text: qsTr("ReHighlight Text"); onClicked:{ Document.recolorIt(textEditor.text);} }
+            MenuItem { text: qsTr("ReHighlight Text"); onClicked:{ textEditor.text = DocumentsModel.recolorIt(textEditor.text);} }
             MenuItem { text: qsTr("Save"); onClicked: saveFile()}
             /*MenuItem { text: qsTr("Preferences"); onClicked: notYetAvailableBanner.show(); }*/
         }

@@ -1,24 +1,22 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import Qt.labs.folderlistmodel 1.0
 import 'components'
 import 'common.js' as Common
 
 Page {
     tools: mainTools
 
-    property alias currentFolder: folderModel.folder;
     signal refresh();
     
     onRefresh: {
-	folderModel.nameFilters = '*';
+	DocumentsModel.loadDir();
     }
    
         
     PageHeader {
          id: header
          title: 'KhtSimpleText'
-         subtitle: Common.beautifulPath(folderModel.folder);
+         subtitle: Common.beautifulPath(DocumentsModel.currentpath);
     }
 
     ListView {
@@ -31,11 +29,7 @@ Page {
         width: parent.width
         z:1
 
-        FolderListModel {
-            id: folderModel
-            folder: '~'
-            showDotAndDotDot : true
-        }
+        model:DocumentsModel
 
         Component {
             id: fileDelegate
@@ -59,7 +53,7 @@ Page {
                     anchors.left: parent.left
                     anchors.right: moreIcon.left
                     anchors.verticalCenter: parent.verticalCenter
-                    Label {text:'<b>'+fileName+'</b>'
+                    Label {text:'<b>'+filename+'</b>'
                         font.family: "Nokia Pure Text"
                         font.pixelSize: 24
                         color:"black"
@@ -68,7 +62,7 @@ Page {
                     }
 
                     Label {
-                        text: Common.beautifulPath(filePath);
+                        text: Common.beautifulPath(filepath);
                         font.family: "Nokia Pure Text"
                         font.pixelSize: 16
                         color: "#cc6633"
@@ -85,7 +79,7 @@ Page {
                     anchors.right: parent.right;
                     anchors.rightMargin: 5
                     anchors.verticalCenter: parent.verticalCenter
-                    opacity: folderModel.isFolder(index)
+                    opacity: isdir ? 1.0 : 0.0
                 }
 
                 MouseArea {
@@ -95,24 +89,26 @@ Page {
                     onPositionChanged: background.opacity = 0.0;
 
                     onClicked: {
-                        console.log(filePath.path)
-                        if (folderModel.isFolder(index)) {
-                            folderModel.folder  = filePath
+                        console.log(filepath)
+                        if (isdir) {
+                            DocumentsModel.currentpath  = filepath
                         }
                         else {
-                             pageStack.push(fileEditPage, { filePath: filePath });
+                            DocumentsModel.loadDocument(index)        
+                            var editingPage = Qt.createComponent(Qt.resolvedUrl("EditPage.qml"));
+                            pageStack.push(editingPage, {index: index,
+                                                                                     modified: false});
                         }
                     }
                     onPressAndHold: {
-                        itemMenu.filePath = filePath;
-                        itemMenu.fileName = fileName;
+                        itemMenu.filePath = filepath;
+                        itemMenu.fileName = filename;
 //                        itemMenu.pageStack = appWindow;
                         itemMenu.open();
                    }
                 }
             }
         }
-        model: folderModel
         delegate: fileDelegate
 
     }
@@ -125,7 +121,7 @@ Page {
 
     onStatusChanged: {
          if (status == PageStatus.Active) {
-              folderModel.nameFilters = '*';
+              DocumentsModel.loadDir();
          }
     }
 

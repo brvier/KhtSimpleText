@@ -36,7 +36,7 @@ import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '1.2.0'
+__version__ = '2.0.0'
 
 class Settings(QObject):
     '''Config object'''
@@ -58,7 +58,8 @@ class Settings(QObject):
         self.config.set('Display', 'fontfamily', 'Nokia Pure Text')
 
         # Writing our configuration file to 'example.cfg'
-        with open(os.path.expanduser('~/.khtsimpletext.cfg'), 'wb') as configfile:
+        with open(os.path.expanduser('~/.khtsimpletext.cfg'), 'wb') \
+            as configfile:
             self.config.write(configfile)
 
     @Slot(unicode, result=unicode)
@@ -84,235 +85,11 @@ class Settings(QObject):
     textWrap = Property(bool, _get_textWrap, notify=on_textWrap)
     fontSize = Property(int, _get_fontSize, notify=on_fontSize)
     fontFamily = Property(unicode, _get_fontFamily, notify=on_fontFamily)
-    syntaxHighlighting = Property(bool, _get_syntaxHighlighting, notify=on_syntaxHighlighting)
+    syntaxHighlighting = Property(bool, _get_syntaxHighlighting,
+                                  notify=on_syntaxHighlighting)
 
-class Document(QObject):
-   '''Represent the text document'''
-
-   def __init__(self,):
-       QObject.__init__(self,)
-       self._text = u''
-       self._modified = False
-       self._colored = False
-       self._filepath = u''
-       self._ready = False
-
-   @Slot(unicode)
-   def load(self,path):
-       ''' Load the document from a path in a thread'''
-       print 'def load:' + path
-       self._set_ready(False)
-       self.thread = threading.Thread(target=self._load, args= (path, ))
-       self.thread.start()
- #      self._load(path)
-
-   def _load(self,path):
-        ''' Load the document from a path '''
-        import codecs
-        self._filepath = QUrl(path).path()
-        print 'def _load:'+self._filepath
-
-        try:
-          with codecs.open(self._filepath, 'r','utf_8') as fh:
-            try:
-                text = fh.read()
-                if text.find('\0') > 0:
-                    print 'Probably utf-16 ... decode it to utf-8 as qml didn t support it well'
-                    text = text.decode('utf-16')
-
-                if (Settings.syntaxHighlighting):
-                    print 'Syntax highlighting Enabled'
-                    self._colorIt(text)
-                else:
-                    self._set_text(text)
-                self._set_ready(True)
-            except Exception, e:
-                print type(e),e
-                self._set_text('')
-                self.on_error.emit(str(e))
-                self._set_ready(True)
-        except Exception, e:
-          self._set_text('')
-          self._set_ready(True)
-          print e
-
-
-   def _colorIt(self, text):
-     ''' Syntax highlight a text in html'''
-     try:
-       lexer =  get_lexer_for_filename(self._filepath)
-       if lexer == None:
-            self._set_text(text)
-            self._set_colored(False)
-            return
-       self._set_colored(True)
-       self._set_text(highlight(text, lexer, HtmlFormatter(full=True)))
-     except ClassNotFound:
-       self._set_colored(False)
-       self._set_text(text)
-     except Exception, e:
-       print e
-       self.on_error.emit(str(e))
-       self._set_colored(False)
-       self._set_text(text)
-
-   def _unescape(self,text):
-     def fixup(m):
-        text = m.group(0)
-        if text[:2] == "&#":
-            # character reference
-            try:
-                if text[:3] == "&#x":
-                    return unichr(int(text[3:-1], 16))
-                else:
-                    return unichr(int(text[2:-1]))
-            except ValueError, e:
-                print e
-        else:
-            # named entity
-            try:
-                text = unichr(htmlentitydefs.name2codepoint[text[1:-1]])
-            except KeyError, e:
-                print e
-        return text # leave as is
-     return re.sub("&#?\w+;", fixup, text)
-
-   @Slot(unicode, result=unicode)
-   def recolorIt(self, text):
-      ''' ReHighlight a text '''
-      return self._colorIt(self._stripTags(text))
-
-   @Slot(unicode, result=unicode)
-   def previewMarkdown(self, text):
-       ''' Generate a markdown preview'''
-       try:
-           return markdown2.markdown(self._stripTags(text))
-       except:
-           return text
-
-   def _stripTags(self,content):
-      ''' Remove html text formating from a text'''
-      from BeautifulSoup import BeautifulSoup
-      content = content.replace('<p style=', '<pre style')
-      plainText = self._unescape(''.join(BeautifulSoup(content).body(text=True)))
-      if (plainText.startswith('\n')):
-        return plainText[1:]
-      return plainText
-
-   @Slot(unicode)
-   def write(self, data):
-       ''' Write the document to a file '''
-       if self._colored:
-          data = self._stripTags(data)
-       try:
-           with open(self.filepath, 'wb') as fh:
-               fh.write(data.encode('utf-8'))
-               print self.filepath , ' written'
-       except Exception, e:
-           print e
-           self.on_error.emit(str(e))
-
-   def _get_text(self):
-       return self._text
-   def _set_text(self, text):
-       self._text = text
-       self.onTextChanged.emit()
-       self.onFilepathChanged.emit()
-       print 'def _set_text:' + text.split('\n')[0]
-
-   def _get_colored(self):
-       return self._colored
-   def _set_colored(self, b):
-       self._colored = b
-       self.onColoredChanged.emit()
-       print 'def _set_colored:' + str(b)
-
-   def _get_ready(self):
-       return self._ready
-   def _set_ready(self, b):
-       self._ready = b
-       self.onReadyChanged.emit()
-
-   def _get_filepath(self):
-       return self._filepath
-
-   onTextChanged = Signal()
-   on_error = Signal(unicode)
-   onColoredChanged = Signal()
-   onReadyChanged = Signal()
-   onFilepathChanged = Signal()
-   filepath = Property(unicode, _get_filepath, notify=onFilepathChanged)
-   text = Property(unicode, _get_text, _set_text, notify=onTextChanged)
-   colored = Property(bool, _get_colored, _set_colored, notify=onColoredChanged)
-   ready = Property(bool, _get_ready, _set_ready, notify=onReadyChanged)
-
-class QmlDirReaderWriter(QObject):
-   ''' A class for manipulating file and directory from Qml'''
-   def __init__(self, ):
-       QObject.__init__(self)
-
-   @Slot(unicode,result=bool)
-   def newFolder(self,path):
-       ''' Create a new folder '''
-       try:
-           path = QUrl(path).path()
-           os.makedirs(path)
-           return True
-       except:
-          return False
-
-   @Slot(unicode,unicode,unicode,result=bool)
-   def rename(self,pathdir,oldname,newname):
-       ''' Rename an existing file '''
-       try:
-           pathdir = os.path.dirname(QUrl(pathdir).path())
-           #oldpath = QUrl(oldname).path()
-           #newpath = QUrl(newname).path()
-           os.rename(os.path.join(pathdir, oldname),os.path.join(pathdir, newname))
-           return True
-       except:
-          return False
-
-   @Slot(unicode,unicode,result=bool)
-   def mv(self,oldpath,newpath):
-       ''' Move a file to another folder '''
-       try:
-           import shutil
-           oldpath = QUrl(oldpath).path()
-           newpath = QUrl(newpath).path()
-           shutil.move( oldpath, newpath)
-           return True
-       except:
-          return False
-
-   @Slot(unicode,unicode,result=bool)
-   def cp(self,oldpath,newpath):
-       ''' Copy a file '''
-       try:
-           import shutil
-           oldpath = QUrl(oldpath).path()
-           newpath = QUrl(newpath).path()
-           shutil.copy2( oldpath, newpath)
-           return True
-       except:
-          return False
-
-   @Slot(unicode,result=bool)
-   def rm(self,path):
-       ''' Delete a file or a folder '''
-       try:
-           path = QUrl(path).path()
-           if os.path.isdir(path):
-                import shutil
-                shutil.rmtree(path)
-           else:
-                os.remove(path)
-           return True
-       except Exception, e:
-          print e
-          return False
-
-
+from documentsModel import DocumentsModel
+from document import Document
 
 class KhtSimpleText(QApplication):
     ''' Application class '''
@@ -325,17 +102,20 @@ class KhtSimpleText(QApplication):
         self.view = QtDeclarative.QDeclarativeView()
         self.glw = QGLWidget()
         self.view.setViewport(self.glw)
-        self.aDocument = Document()
+        self.document = Document('~')
+        self.documentsModel= DocumentsModel(parent=self)
+
         self.rootContext = self.view.rootContext()
         self.rootContext.setContextProperty("argv", sys.argv)
         self.rootContext.setContextProperty("__version__", __version__)
         self.rootContext.setContextProperty("Settings", Settings())
-        self.rootContext.setContextProperty("QmlDirReaderWriter", QmlDirReaderWriter())
-        self.rootContext.setContextProperty('Document', self.aDocument)
+        self.rootContext.setContextProperty("DocumentsModel",
+                                            self.documentsModel)
+        self.rootContext.setContextProperty("Document",
+                                            self.document)
         self.view.setSource(QUrl.fromLocalFile(
                 os.path.join(os.path.dirname(__file__), 'qml',  'main.qml')))
         self.rootObject = self.view.rootObject()
-        self.aDocument.on_error.connect(self.rootObject.onError)
         self.view.showFullScreen()
 
 if __name__ == '__main__':

@@ -14,7 +14,7 @@ PageStackWindow {
         objectName: 'fileBrowserPage'
     }
 
-    NewFilePage {
+    /*NewFilePage {
         id: newFilePage
     }
     CopyFilePage {
@@ -38,7 +38,7 @@ PageStackWindow {
 
     RenamePage {
         id: renameFilePage
-    }
+    }*/
 
     ItemMenu {
         id: itemMenu
