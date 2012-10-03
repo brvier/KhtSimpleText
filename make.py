@@ -43,7 +43,8 @@ __upgrade__ = '''0.4.1 :
 1.1.2: fix the 1.1.1 fix :p
 1.1.3: Deal a problem with harmattan invoker
 1.1.4: Fix packaging
-1.2.0: Improve text flickering and ensure new written text visible on horizontal flickering (Fork and improve qml qt component TextArea'''
+1.2.0: Improve text flickering and ensure new written text visible on horizontal flickering (Fork and improve qml qt component TextArea
+2.0.0: Complete rewrite, real time syntax highlighting'''
 
 if __name__ == "__main__":
     try:
@@ -51,25 +52,25 @@ if __name__ == "__main__":
     except:
         pass
 
-    p=pypackager.PyPackager("khtsimpletext")
+    p = pypackager.PyPackager("khtsimpletext")
     p.display_name = 'KhtSimpleText'
     p.version = khtsimpletext.__version__
     p.buildversion = __build__
-    p.description="A plain text editor for Harmattan devices (n950, n9) with basic syntax highlighting feature"
-    p.upgrade_description=__upgrade__
-    p.author=__author__
-    p.maintainer=__author__
-    p.email=__mail__
+    p.description = "A plain text editor for Harmattan devices (n950, n9) with basic syntax highlighting feature"
+    p.upgrade_description = __upgrade__
+    p.author = __author__
+    p.maintainer = __author__
+    p.email = __mail__
     p.depends = "python, python-pyside.qtgui, python-pyside.qtdeclarative, python-pyside.qtcore, python-pyside.qtopengl, python-beautifulsoup"
     p.suggests = ""
-    p.section="user/office"
-    p.arch="armel"
-    p.urgency="low"
-    p.icon='khtsimpletext.png'
-    p.distribution="harmattan"
-    p.repository="Khertan Repository"
+    p.section = "user/office"
+    p.arch = "armel"
+    p.urgency = "low"
+    p.icon = 'khtsimpletext.png'
+    p.distribution = "harmattan"
+    p.repository = "Khertan Repository"
     p.bugtracker = 'http://github.com/khertan/KhtSimpleText/issues'
-    p.changelog =  p.upgrade_description
+    p.changelog = p.upgrade_description
     p.maemo_flags = 'visible'
     p.meego_desktop_entry_filename = '/usr/share/applications/khtsimpletext.desktop'
     p.createDigsigsums = True
@@ -79,25 +80,19 @@ echo "Giving permissions for apps to execute"
 chmod +x /opt/khtsimpletext/__init__.py
 exit 0'''
 
-
-    #Src
     #Src
     for root, dirs, fs in os.walk(os.path.join(os.path.dirname(__file__), p.name)):
-      for f in fs:
-        files.append(os.path.join(root, f))
+        for f in fs:
+            files.append(os.path.join(root, f))
 
-
-    p['/usr/share/dbus-1/services'] = ['khtsimpletext.service',]
-    #p['/usr/share/pixmaps'] = ['khtsimpletext.png',] #Removed due to stupid nokia store qa rules
-    p['/usr/share/icons/blanco/80x80/apps'] = ['khtsimpletext.png',]
-    p['/usr/share/applications'] = ['khtsimpletext.desktop',]
+    p['/usr/share/dbus-1/services'] = ['khtsimpletext.service', ]
+    p['/usr/share/icons/hicolor/80x80/apps'] = ['khtsimpletext.png', ]
+    p['/usr/share/icons/hicolor/scalable/apps'] = ['khtsimpletext.svg', ]
+    p['/usr/share/applications'] = ['khtsimpletext.desktop', ]
     p["/opt"] = files
 
-    print p.generate(build_binary=True,build_src=True)
+    print p.generate(build_binary=True, build_src=True)
     if not os.path.exists('dists'):
         os.mkdir('dists')
-    for filepath in glob(p.name+'_'+p.version+'-'+p.buildversion+'*'):
+    for filepath in glob(p.name + '_' + p.version + '-' + p.buildversion + '*'):
         os.rename(filepath, os.path.join(os.path.dirname(filepath), 'dists', os.path.basename(filepath)))
-
-
-
