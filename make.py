@@ -44,7 +44,7 @@ __upgrade__ = '''0.4.1 :
 1.1.3: Deal a problem with harmattan invoker
 1.1.4: Fix packaging
 1.2.0: Improve text flickering and ensure new written text visible on horizontal flickering (Fork and improve qml qt component TextArea
-2.0.0: Complete rewrite, real time syntax highlighting'''
+2.0.0: Mostly rewritten, fix some bugs due to implementation'''
 
 if __name__ == "__main__":
     try:

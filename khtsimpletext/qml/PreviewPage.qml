@@ -49,7 +49,7 @@ Page {
                  id: textEditor
                  height: Math.max (850, implicitHeight)
                  width: Math.max(flick.width, implicitWidth) //previewPage.width + 4
-                 wrapMode: TextEdit.NoWrap
+                 wrapMode: TextEdit.wordWrap
                  textFormat: TextEdit.RichText
                  text: atext
                  font { bold: false; family: "Nokia Pure Text"; pixelSize: 18;}
