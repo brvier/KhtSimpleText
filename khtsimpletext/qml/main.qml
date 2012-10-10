@@ -131,6 +131,12 @@ PageStackWindow {
         }
     }
 
+    function replaceWithEdit(index) {
+        var editPage = Qt.createComponent(
+                        Qt.resolvedUrl('EditPage.qml'));
+        pageStack.replace(editPage, {index: index, modified: false});
+    }
+
     function pushAbout() {
         pageStack.push(Qt.createComponent(Qt.resolvedUrl("components/AboutPage.qml")),
              {
@@ -138,11 +144,13 @@ PageStackWindow {
                           iconSource: Qt.resolvedUrl('../icons/khtsimpletext.png'),
                           slogan : 'Code everywhere !',
                           text : 
-                             'A simple plain text editor with Syntax Highlighting.' +
-                             '\nWeb Site : http://khertan.net/khtsimpletext' +
-                             '\n\nBy Benoît HERVIER (Khertan)' +
-                             '\nLicenced under GPLv3' +
-                             '\n\nReport bugs on http://github.com/khertan/KhtSimpleText/Issues' 
+                             'A text editor with Syntax Highlighting.' +
+                             '<br><br>Web Site : http://khertan.net/KhtSimpleText' +
+                             '<br>By Benoît HERVIER (Khertan)' +
+                             '<br><br><b>Licenced under GPLv3</b>' +
+                             '<br><br><b>Changelog :</b><br>' +
+                             __upgrade__ +
+                             '<br>Report bugs on http://github.com/khertan/KhtSimpleText/Issues' 
              }
              );
     }                

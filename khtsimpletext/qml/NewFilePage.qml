@@ -41,12 +41,11 @@ Page {
             enabled: inputField.text != ""
             text: "Create file"
             onClicked: {
-                var editingPage = Qt.createComponent(Qt.resolvedUrl("EditPage.qml"));
-                if (DocumentsModel.newFile(inputField.text)) {
+                var index = DocumentsModel.newFile(inputField.text);
+                if (index >= 0) {
                     Document.filepath = DocumentsModel.currentpath + inputField.text;
                     Document.load();
-                    pageStack.replace(editingPage, {index: -1, 
-                             modified: false});}
+                    replaceWithEdit(index);}
                 else {
                     onError(inputField.text + ' already exists');                    
                 }

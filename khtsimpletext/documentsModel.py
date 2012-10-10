@@ -80,23 +80,23 @@ class DocumentsModel(QAbstractListModel):
         self.loadDir()
         self.endResetModel()
 
-    @Slot(unicode, result=bool)
+    @Slot(unicode, result=int)
     def newFile(self, filename):
         self.beginResetModel()
         filepath = os.path.join(self._currentPath,
                                 filename)
         print 'New file:', filepath
         if os.path.exists(filepath):
-            isnew = False
+            isnewindex = -1
         else:
             new_document = Document(filepath)
             new_document.ready = True
             new_document.write(' ')
             self._documents.append(new_document)
             self._sortData()
-            isnew = True
+            isnewindex = len(self._documents) - 1
         self.endResetModel()
-        return isnew
+        return isnewindex
 
     @Slot(int)
     def duplicate(self, idx):

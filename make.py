@@ -23,29 +23,6 @@ import pypackager
 __build__ = '2'
 __author__ = "Benoît HERVIER (khertan)"
 __mail__ = "khertan@khertan.net"
-__upgrade__ = '''0.4.1 :
-* Implement MarkDown preview
-* Syntax Highlighting (not in realtime due to qml limitation)
-* Fix loading of large text (But can appear frozen sometime due to qml limitations)
-* Add a busy cursor when loading text
-0.4.2 :
-* Fix creation of new file
-* Remove threading, seems to slow donw more things and make some sync problem on signals
-0.4.3 :
-* Reactivate threading, fix removal of space bugs on syntax highlighted text, improve signals
-1.0.0 :
-* Giant bump number release just to conform to nokia ovi rules
-1.0.1 :
-* fix missing package beautifulsoup in the package dependencies
-1.1.0 :
-* fix reading of highlighting setting, and add support for decoding utf-16 file
-1.1.1: fix the 1.1.0 fix :)
-1.1.2: fix the 1.1.1 fix :p
-1.1.3: Deal a problem with harmattan invoker
-1.1.4: Fix packaging
-1.2.0: Improve text flickering and ensure new written text visible on horizontal flickering (Fork and improve qml qt component TextArea
-2.0.0: Mostly rewritten, fix some bugs due to implementation'''
-
 if __name__ == "__main__":
     try:
         os.chdir(os.path.dirname(sys.argv[0]))
@@ -57,7 +34,7 @@ if __name__ == "__main__":
     p.version = khtsimpletext.__version__
     p.buildversion = __build__
     p.description = "A plain text editor for Harmattan devices (n950, n9) with basic syntax highlighting feature"
-    p.upgrade_description = __upgrade__
+    p.upgrade_description = khtsimpletext.__upgrade__
     p.author = __author__
     p.maintainer = __author__
     p.email = __mail__

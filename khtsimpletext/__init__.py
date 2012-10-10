@@ -17,7 +17,6 @@ from PySide.QtGui import QApplication
 from PySide.QtCore import QUrl, Slot, QObject, Property, Signal
 from PySide import QtDeclarative
 from PySide.QtOpenGL import QGLWidget
-
 import sys
 import os
 import htmlentitydefs
@@ -33,7 +32,41 @@ import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '2.0.0'
+__version__ = '2.1.0'
+__upgrade__ = '''0.4.1 :
+ * Implement MarkDown preview
+ * Syntax Highlighting (not in realtime due to qml limitation)
+ * Fix loading of large text (But can appear frozen sometime due to qml limitations)
+ * Add a busy cursor when loading text
+0.4.2 :
+ * Fix creation of new file
+ * Remove threading, seems to slow donw more things and make some sync problem on signals
+0.4.3 :
+ * Reactivate threading, fix removal of space bugs on syntax highlighted text, improve signals
+1.0.0 :
+ * Giant bump number release just to conform to nokia ovi rules
+1.0.1 :
+ * fix missing package beautifulsoup in the package dependencies
+1.1.0 :
+ * fix reading of highlighting setting, and add support for decoding utf-16 file
+1.1.1:
+ * fix the 1.1.0 fix :)
+1.1.2:
+ * fix the 1.1.1 fix :p
+1.1.3:
+ * Deal a problem with harmattan invoker
+1.1.4:
+ * Fix packaging
+1.2.0:
+ * Improve text flickering
+ * ensure new written text visible on horizontal flickering (Fork and improve qml qt component TextArea
+2.0.0:
+ * Mostly rewritten, fix some bugs due to implementation
+2.1.0:
+ * Fix delete feature
+ * Fix new file feature
+ * Add changelog in about screen'''
+
 
 class Settings(QObject):
     '''Config object'''
@@ -105,6 +138,8 @@ class KhtSimpleText(QApplication):
         self.rootContext = self.view.rootContext()
         self.rootContext.setContextProperty("argv", sys.argv)
         self.rootContext.setContextProperty("__version__", __version__)
+        self.rootContext.setContextProperty("__upgrade__", __upgrade__
+                                            .replace('\n', '<br>'))
         self.rootContext.setContextProperty("Settings", Settings())
         self.rootContext.setContextProperty("DocumentsModel",
                                             self.documentsModel)
