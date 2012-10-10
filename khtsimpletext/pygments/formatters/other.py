@@ -5,7 +5,7 @@
 
     Other formatters: NullFormatter, RawTokenFormatter.
 
-    :copyright: Copyright 2006-2010 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2012 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -64,7 +64,7 @@ class RawTokenFormatter(Formatter):
         if self.encoding:
             raise OptionError('the raw formatter does not support the '
                               'encoding option')
-        self.encoding = 'utf-8'  # let pygments.format() do the right thing
+        self.encoding = 'ascii'  # let pygments.format() do the right thing
         self.compress = get_choice_opt(options, 'compress',
                                        ['', 'none', 'gz', 'bz2'], '')
         self.error_color = options.get('error_color', None)

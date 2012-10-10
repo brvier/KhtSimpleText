@@ -8,6 +8,7 @@ Page {
 
     property string filePath;
     property string fileName;
+    property int index;
 
     tools: commonTools
 
@@ -44,7 +45,7 @@ Page {
             text: "Rename"
             onClicked: {
                 pageStack.pop();
-                if (!QmlDirReaderWriter.rename(filePath, fileName,inputField.text)) {
+                if (!DocumentsModel.rename(index, inputField.text)) {
                       errorBanner.text = 'An error occur while renaming file';
                       errorBanner.show();}
             }

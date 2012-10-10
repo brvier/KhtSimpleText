@@ -8,6 +8,7 @@ Page {
 
     property string filePath;
     property string fileName;
+    property int index;
 
     tools: commonTools
 
@@ -44,7 +45,7 @@ Page {
             text: "Move file"
             onClicked: {
                 pageStack.pop()
-                if (!QmlDirReaderWriter.mv(filePath, inputField.text)) {
+                if (!DocumentsModel.move(index, inputField.text)) {
                       errorBanner.text = 'An error occur while moving file';
                       errorBanner.show();}
             }

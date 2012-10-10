@@ -104,7 +104,8 @@ Page {
                     onPressAndHold: {
                         itemMenu.filePath = filepath;
                         itemMenu.fileName = filename;
-//                        itemMenu.pageStack = appWindow;
+                        itemMenu.index = index;
+                        //itemMenu.pageStack = appWindow;
                         itemMenu.open();
                    }
                 }

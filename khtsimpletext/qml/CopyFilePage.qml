@@ -8,7 +8,8 @@ Page {
 
     property string filePath;
     property string fileName;
-
+    property int index;
+    
     tools: commonTools
 
     PageHeader {
@@ -44,7 +45,7 @@ Page {
             text: "Create file"
             onClicked: {
                 pageStack.pop()
-                if (!QmlDirReaderWriter.cp(filePath, inputField.text)) {
+                if (!DocumentsModel.copyFile(index, inputField.text)) {
                       errorBanner.text = 'An error occur while copying file';
                       errorBanner.show();}
             }

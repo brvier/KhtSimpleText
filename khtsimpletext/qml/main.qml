@@ -114,15 +114,16 @@ PageStackWindow {
    showStatusBar: true
 
     QueryDialog {
-        property string filepath
+        property string fileName
+        property int index
         id: deleteQueryDialog
         icon: Qt.resolvedUrl('../icons/khtsimpletext.png')
         titleText: "Delete"
-        message: "Are you sure you want to delete : " + Common.beautifulPath(filepath) + '?'
+        message: "Are you sure you want to delete : " + Common.beautifulPath(fileName) + '?'
         acceptButtonText: qsTr("Delete")
         rejectButtonText: qsTr("Cancel")
         onAccepted: {
-                if (!(QmlDirReaderWriter.rm(filepath))) {
+                if (!(DocumentsModel.remove(index))) {
                     errorBanner.text = 'An error occur while deleting item';
                     errorBanner.show();
                 }

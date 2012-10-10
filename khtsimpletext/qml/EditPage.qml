@@ -15,6 +15,12 @@ Page {
         pageStack.pop();
     }
 
+    function recolorIt() {
+        var index = textEditor.cursorPosition;
+        Document.recolorIt(textEditor.text);
+        textEditor.cursorPosition = index;    
+    }
+    
     function saveFile() {
         Document.write(textEditor.text);
     }
@@ -75,10 +81,10 @@ Page {
                  inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                  textFormat: TextEdit.AutoText
                  font { bold: false; family: Settings.fontFamily; pixelSize: Settings.fontSize;}
-                 onTextChanged: { modified = true; autoTimer.restart() }
+                 onTextChanged: { modified = true; /*autoTimer.restart();*/ }
                  opacity: 1.0
          }
-         Timer {
+         /*Timer { //Too slow to be used
             id: autoTimer
             interval: 10000
             onTriggered:{
@@ -87,7 +93,7 @@ Page {
                 textEditor.cursorPosition = index;
             } 
             
-         }
+         }*/
 
          
          onOpacityChanged: {
@@ -107,12 +113,18 @@ Page {
             MenuItem { text: qsTr("About"); onClicked: pushAbout()}
             MenuItem { text: qsTr("MarkDown Preview"); onClicked: {
                 var atext = Document.previewMarkdown(textEditor.text);
-                console.log(atext);
                 var previewPage = Qt.createComponent(Qt.resolvedUrl("PreviewPage.qml"));
                 pageStack.push(previewPage, {atext:atext}); }
             }
-            MenuItem { text: qsTr("ReHighlight Text"); onClicked:{ Document.recolorIt(textEditor.text);} }
-            MenuItem { text: qsTr("Save"); onClicked: saveFile()}
+            MenuItem { text: qsTr("ReHighlight Text"); onClicked:{ 
+                recolorIt();    
+                }
+            }
+            MenuItem { text: qsTr("Save"); onClicked: {
+                saveFile();
+                recolorIt;
+                }
+            }
             /*MenuItem { text: qsTr("Preferences"); onClicked: notYetAvailableBanner.show(); }*/
         }
     }

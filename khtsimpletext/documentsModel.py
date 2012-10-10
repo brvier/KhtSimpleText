@@ -80,21 +80,68 @@ class DocumentsModel(QAbstractListModel):
         self.loadDir()
         self.endResetModel()
 
+    @Slot(unicode, result=bool)
+    def newFile(self, filename):
+        self.beginResetModel()
+        filepath = os.path.join(self._currentPath,
+                                filename)
+        print 'New file:', filepath
+        if os.path.exists(filepath):
+            isnew = False
+        else:
+            new_document = Document(filepath)
+            new_document.ready = True
+            new_document.write('')
+            self._documents.append(new_document)
+            self._sortData()
+            isnew = True
+        self.endResetModel()
+        return isnew
+
     @Slot(int)
     def duplicate(self, idx):
         self.beginResetModel()
-        new_document = self._documents[idx].duplicate()
+        newfilepath = os.path.join(
+            os.path.dirname(self._documents[idx].filepath),
+            os.path.splitext(os.path.basename(
+                self._documents[idx].filepath))[0] +
+            ' Copy' +
+            os.path.splitext(os.path.basename(
+            self._documents[idx].filepath))[1])
+        new_document = self._documents[idx].copy(newfilepath)
         self._documents.append(new_document)
         self._sortData()
         self.endResetModel()
 
-    @Slot(int)
+    @Slot(int, unicode, result=bool)
+    def copyFile(self, idx, newfilepath):
+        copied = self._documents[idx].copyFile(newfilepath)
+        self.reload()
+        return copied
+
+    @Slot(int, result=bool)
     def remove(self, idx):
         self.beginResetModel()
-        self._documents[idx].delete()
+        deleted = self._documents[idx].delete()
         self._documents.remove(self._documents[idx])
         self._sortData()
         self.endResetModel()
+        return deleted
+
+    @Slot(int, unicode, result=bool)
+    def rename(self, idx, newfilename):
+        self.beginResetModel()
+        renammed = self._documents[idx].rename(newfilename)
+        self._sortData()
+        self.endResetModel()
+        return renammed
+
+    @Slot(int, unicode, result=bool)
+    def move(self, idx, newfilepath):
+        renammed = self._documents[idx].rename(newfilepath)
+        if renammed:
+            self.reload()
+        return renammed
 
     def _get_currentpath(self):
         return self._currentPath

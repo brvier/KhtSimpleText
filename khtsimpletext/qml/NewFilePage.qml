@@ -42,10 +42,15 @@ Page {
             text: "Create file"
             onClicked: {
                 var editingPage = Qt.createComponent(Qt.resolvedUrl("EditPage.qml"));
-                Document.filepath = filepath;
-                Document.load();
-                pageStack.replace(editingPage, {index: -1, 
-                             modified: false});
+                if (DocumentsModel.newFile(inputField.text)) {
+                    Document.filepath = DocumentsModel.currentpath + inputField.text;
+                    Document.load();
+                    pageStack.replace(editingPage, {index: -1, 
+                             modified: false});}
+                else {
+                    onError(inputField.text + ' already exists');                    
+                }
+                
             }
         }
     }

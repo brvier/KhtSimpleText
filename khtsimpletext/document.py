@@ -17,6 +17,7 @@ from PySide.QtCore import Slot, QObject, Property, Signal
 
 import threading
 import os
+import shutil
 from  markdown import markdown
 import re
 import htmlentitydefs
@@ -31,6 +32,9 @@ except:
 
 def _stripTags(text):
     ''' Remove html text formating from a text'''
+    if not text:
+        return text
+
     from BeautifulSoup import BeautifulSoup
     plainText = _unescape(''.join(
         BeautifulSoup(
@@ -156,7 +160,7 @@ class Document(QObject):
     def previewMarkdown(self, text):
         ''' Generate a markdown preview'''
         try:
-            return markdown(_stripTags(text), extensions = ['nl2br', ])
+            return markdown(_stripTags(text), extensions=['nl2br', ])
         except:
             return text
 
@@ -170,6 +174,37 @@ class Document(QObject):
         except Exception, err:
             print err
             self.onError.emit(unicode(err))
+
+    def delete(self,):
+        try:
+            os.remove(self._filepath)
+            return True
+        except Exception, err:
+            self.onError.emit(unicode(err))
+            print err
+        return False
+
+    def copyFile(self, newfilepath):
+        try:
+            shutil.copy(self._filepath, newfilepath)
+            return True
+        except Exception, err:
+            self.onError.emit(unicode(err))
+            print err
+        return False
+
+    def rename(self, newfilename):
+        try:
+            newfilepath = os.path.join(os.path.dirname(self._filepath),
+                                       newfilename)
+            shutil.move(self._filepath, newfilepath)
+            self._set_filepath(newfilepath)
+            print 'Rennamed with ', newfilename
+            return True
+        except Exception, err:
+            self.onError.emit(unicode(err))
+            print err
+        return False
 
     def _get_ready(self):
         return self._ready

@@ -18,11 +18,8 @@ from PySide.QtCore import QUrl, Slot, QObject, Property, Signal
 from PySide import QtDeclarative
 from PySide.QtOpenGL import QGLWidget
 
-import threading
 import sys
 import os
-import markdown2
-import re
 import htmlentitydefs
 try:
   from pygments import highlight
