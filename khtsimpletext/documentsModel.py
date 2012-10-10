@@ -91,7 +91,7 @@ class DocumentsModel(QAbstractListModel):
         else:
             new_document = Document(filepath)
             new_document.ready = True
-            new_document.write('')
+            new_document.write(' ')
             self._documents.append(new_document)
             self._sortData()
             isnew = True

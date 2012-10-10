@@ -32,14 +32,15 @@ except:
 
 def _stripTags(text):
     ''' Remove html text formating from a text'''
-    if not text:
-        return text
-
     from BeautifulSoup import BeautifulSoup
-    plainText = _unescape(''.join(
-        BeautifulSoup(
-            text.replace('<p style=', '<pre style'))
-        .body(text=True)))
+    try:
+        plainText = _unescape(''.join(
+            BeautifulSoup(
+                text.replace('<p style=', '<pre style'))
+            .body(text=True)))
+    except (ValueError, TypeError):
+        plainText = text
+
     if (plainText.startswith('\n')):
         return plainText[1:]
     return plainText
@@ -177,7 +178,10 @@ class Document(QObject):
 
     def delete(self,):
         try:
-            os.remove(self._filepath)
+            if os.path.isdir(self._filepath):
+                shutil.rmtree(self._filepath)
+            else:
+                os.remove(self._filepath)
             return True
         except Exception, err:
             self.onError.emit(unicode(err))
