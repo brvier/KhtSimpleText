@@ -20,7 +20,7 @@ from glob import glob
 import khtsimpletext
 import pypackager
 
-__build__ = '2'
+__build__ = '3'
 __author__ = "Benoît HERVIER (khertan)"
 __mail__ = "khertan@khertan.net"
 if __name__ == "__main__":
@@ -33,12 +33,14 @@ if __name__ == "__main__":
     p.display_name = 'KhtSimpleText'
     p.version = khtsimpletext.__version__
     p.buildversion = __build__
-    p.description = "A plain text editor for Harmattan devices (n950, n9) with basic syntax highlighting feature"
+    p.summary = 'A text editor'
+    p.description = "A text editor for Harmattan devices (n950, n9) and MeeGo/Mer device with basic syntax highlighting feature"
     p.upgrade_description = khtsimpletext.__upgrade__
     p.author = __author__
     p.maintainer = __author__
     p.email = __mail__
     p.depends = "python, python-pyside.qtgui, python-pyside.qtdeclarative, python-pyside.qtcore, python-pyside.qtopengl, python-beautifulsoup"
+    p.rpm_depends = "python, python-pyside, python-beautifulsoup"
     p.suggests = ""
     p.section = "user/office"
     p.arch = "armel"
@@ -57,6 +59,13 @@ echo "Giving permissions for apps to execute"
 chmod +x /opt/khtsimpletext/__init__.py
 exit 0'''
 
+
+    #Include byte compiled files, so do not remove it at packaging
+    #time : selinux / obs spec packaging can require them
+    from compileall import compile_dir
+    compile_dir(os.path.join(os.path.dirname(__file__), p.name))
+    os.system('python -O -m compileall '+os.path.join(os.path.dirname(__file__), p.name))
+
     #Src
     for root, dirs, fs in os.walk(os.path.join(os.path.dirname(__file__), p.name)):
         for f in fs:
@@ -72,4 +81,4 @@ exit 0'''
     if not os.path.exists('dists'):
         os.mkdir('dists')
     for filepath in glob(p.name + '_' + p.version + '-' + p.buildversion + '*'):
-        os.rename(filepath, os.path.join(os.path.dirname(filepath), 'dists', os.path.basename(filepath)))
+        os.rename(filepath, os.path.join(os.path.dirname(filepath), 'dists', os.path.basename(filepath))) 

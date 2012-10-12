@@ -14,7 +14,6 @@ I've also planned to implement other features :
 
  * Auto save feature
  * Add a gui for preferences
- * Rewrite folderModel to show hidden files
 
 Some screenshots of an older version :
 
@@ -30,4 +29,4 @@ Of course for more informations (source, bugtracker, ...) : [KhtSimpleText][7]
 [5]:http://khertan.net/medias/khtsimpletext_screenshot_2.png
 [6]:http://khertan.net/medias/khtsimpletext_screenshot_3.png
 [7]:http://khertan.net/KhtSimpleText   
-[8]:http://khertan.net/medias/khtsimpletext_screenshot_3.png 
+[8]:http://khertan.net/medias/khtsimpletext_screenshot_3.png  

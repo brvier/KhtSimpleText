@@ -32,7 +32,7 @@ import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '2.1.0'
+__version__ = '2.1.1'
 __upgrade__ = '''0.4.1 :
  * Implement MarkDown preview
  * Syntax Highlighting (not in realtime due to qml limitation)
@@ -65,7 +65,9 @@ __upgrade__ = '''0.4.1 :
 2.1.0:
  * Fix delete feature
  * Fix new file feature
- * Add changelog in about screen'''
+ * Add changelog in about screen
+2.1.1:
+ * Adaptation for MeeGo Mer/Nemo'''
 
 
 class Settings(QObject):
@@ -130,8 +132,16 @@ class KhtSimpleText(QApplication):
         self.setApplicationName("KhtSimpleText")
 
         self.view = QtDeclarative.QDeclarativeView()
-        self.glw = QGLWidget()
-        self.view.setViewport(self.glw)
+
+        #Are we on mer ? So don't use opengl
+        #As it didn't works on all devices
+        if not os.path.exists('/etc/mer-release'):
+            self.glformat = QGLFormat().defaultFormat()
+            self.glformat.setSampleBuffers(False)
+            self.glw = QGLWidget(self.glformat)
+            self.glw.setAutoFillBackground(False)
+            self.view.setViewport(self.glw)
+
         self.document = Document('~')
         self.documentsModel= DocumentsModel(currentDoc=self.document)
 
