@@ -16,7 +16,7 @@
 from PySide.QtGui import QApplication
 from PySide.QtCore import QUrl, Slot, QObject, Property, Signal
 from PySide import QtDeclarative
-from PySide.QtOpenGL import QGLWidget
+from PySide.QtOpenGL import QGLWidget, QGLFormat
 import sys
 import os
 import htmlentitydefs
@@ -32,7 +32,7 @@ import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '2.1.1'
+__version__ = '2.1.2'
 __upgrade__ = '''0.4.1 :
  * Implement MarkDown preview
  * Syntax Highlighting (not in realtime due to qml limitation)
@@ -67,7 +67,9 @@ __upgrade__ = '''0.4.1 :
  * Fix new file feature
  * Add changelog in about screen
 2.1.1:
- * Adaptation for MeeGo Mer/Nemo'''
+ * Adaptation for MeeGo Mer/Nemoi
+2.1.2:
+ * Add missing import of QGLFormat'''
 
 
 class Settings(QObject):
