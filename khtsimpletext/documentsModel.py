@@ -29,7 +29,7 @@ class DocumentsModel(QAbstractListModel):
 
     def __init__(self, currentDoc=None):
         self._documents = {}
-        self._currentPath = u'/home/user/'
+        self._currentPath = os.path.expanduser('~/')
         QAbstractListModel.__init__(self)
         self.setRoleNames(dict(enumerate(DocumentsModel.COLUMNS)))
         self.currentDoc = currentDoc

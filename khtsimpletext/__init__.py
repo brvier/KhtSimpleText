@@ -19,20 +19,12 @@ from PySide import QtDeclarative
 from PySide.QtOpenGL import QGLWidget, QGLFormat
 import sys
 import os
-import htmlentitydefs
-try:
-  from pygments import highlight
-  from pygments.formatters import HtmlFormatter
-  from pygments.lexers import get_lexer_for_filename
-  from pygments.util import ClassNotFound
-except:
-  pass
 
 import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '2.1.2'
+__version__ = '2.1.3'
 __upgrade__ = '''0.4.1 :
  * Implement MarkDown preview
  * Syntax Highlighting (not in realtime due to qml limitation)
@@ -69,7 +61,9 @@ __upgrade__ = '''0.4.1 :
 2.1.1:
  * Adaptation for MeeGo Mer/Nemoi
 2.1.2:
- * Add missing import of QGLFormat'''
+ * Add missing import of QGLFormat
+2.1.3:
+ * Fix for Nemomobile/Mer to use real user path'''
 
 
 class Settings(QObject):
@@ -92,23 +86,26 @@ class Settings(QObject):
         self.config.set('Display', 'fontfamily', 'Nokia Pure Text')
 
         # Writing our configuration file to 'example.cfg'
-        with open(os.path.expanduser('~/.khtsimpletext.cfg'), 'wb') \
-            as configfile:
+        with open(os.path.expanduser('~/.khtsimpletext.cfg'),
+                  'wb') as configfile:
             self.config.write(configfile)
 
     @Slot(unicode, result=unicode)
-    def get(self,option):
+    def get(self, option):
         try:
-            return self.config.get('Display',option)
+            return self.config.get('Display', option)
         except:
             return ''
 
     def _get_textWrap(self,):
         return (self.get('textwrap').lower() == 'true')
+
     def _get_fontSize(self,):
         return int(self.get('fontsize'))
+
     def _get_fontFamily(self,):
         return self.get('fontfamily')
+
     def _get_syntaxHighlighting(self,):
         return (self.get('syntaxhighlighting').lower() == 'true')
 
@@ -124,6 +121,7 @@ class Settings(QObject):
 
 from documentsModel import DocumentsModel
 from document import Document
+
 
 class KhtSimpleText(QApplication):
     ''' Application class '''
@@ -145,7 +143,7 @@ class KhtSimpleText(QApplication):
             self.view.setViewport(self.glw)
 
         self.document = Document('~')
-        self.documentsModel= DocumentsModel(currentDoc=self.document)
+        self.documentsModel = DocumentsModel(currentDoc=self.document)
 
         self.rootContext = self.view.rootContext()
         self.rootContext.setContextProperty("argv", sys.argv)
@@ -158,7 +156,7 @@ class KhtSimpleText(QApplication):
         self.rootContext.setContextProperty("Document",
                                             self.document)
         self.view.setSource(QUrl.fromLocalFile(
-                os.path.join(os.path.dirname(__file__), 'qml',  'main.qml')))
+            os.path.join(os.path.dirname(__file__), 'qml',  'main.qml')))
         self.rootObject = self.view.rootObject()
         self.view.showFullScreen()
 
