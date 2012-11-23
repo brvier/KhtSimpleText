@@ -63,7 +63,9 @@ __upgrade__ = '''0.4.1 :
 2.1.2:
  * Add missing import of QGLFormat
 2.1.3:
- * Fix for Nemomobile/Mer to use real user path'''
+ * Fix for Nemomobile/Mer to use real user path
+2.1.4:
+ * Add 64x64 icon for nemo mobile, clean make.py'''
 
 
 class Settings(QObject):

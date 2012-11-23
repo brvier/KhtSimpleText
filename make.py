@@ -34,12 +34,14 @@ if __name__ == "__main__":
     p.version = khtsimpletext.__version__
     p.buildversion = __build__
     p.summary = 'A text editor'
-    p.description = "A text editor for Harmattan devices (n950, n9) and MeeGo/Mer device with basic syntax highlighting feature"
+    p.description = "A text editor for Harmattan devices (n950, n9)" \
+        + " and MeeGo/Mer device with basic syntax highlighting feature"
     p.upgrade_description = khtsimpletext.__upgrade__
     p.author = __author__
     p.maintainer = __author__
     p.email = __mail__
-    p.depends = "python, python-pyside.qtgui, python-pyside.qtdeclarative, python-pyside.qtcore, python-pyside.qtopengl, python-beautifulsoup"
+    p.depends = "python, python-pyside.qtgui, python-pyside.qtdeclarative, " \
+        + "python-pyside.qtcore, python-pyside.qtopengl, python-beautifulsoup"
     p.rpm_depends = "python, python-pyside, python-beautifulsoup"
     p.suggests = ""
     p.section = "user/office"
@@ -51,7 +53,8 @@ if __name__ == "__main__":
     p.bugtracker = 'http://github.com/khertan/KhtSimpleText/issues'
     p.changelog = p.upgrade_description
     p.maemo_flags = 'visible'
-    p.meego_desktop_entry_filename = '/usr/share/applications/khtsimpletext.desktop'
+    p.meego_desktop_entry_filename = ('/usr/share/applications/'
+                                      'khtsimpletext.desktop')
     p.createDigsigsums = True
     files = []
     p.postinst = '''#!/bin/sh
@@ -59,20 +62,22 @@ echo "Giving permissions for apps to execute"
 chmod +x /opt/khtsimpletext/__init__.py
 exit 0'''
 
-
     #Include byte compiled files, so do not remove it at packaging
     #time : selinux / obs spec packaging can require them
     from compileall import compile_dir
     compile_dir(os.path.join(os.path.dirname(__file__), p.name))
-    os.system('python -O -m compileall '+os.path.join(os.path.dirname(__file__), p.name))
+    os.system('python -O -m compileall '
+              + os.path.join(os.path.dirname(__file__), p.name))
 
     #Src
-    for root, dirs, fs in os.walk(os.path.join(os.path.dirname(__file__), p.name)):
+    for root, dirs, fs in os.walk(os.path.join(os.path.dirname(__file__),
+                                  p.name)):
         for f in fs:
             files.append(os.path.join(root, f))
 
     p['/usr/share/dbus-1/services'] = ['khtsimpletext.service', ]
     p['/usr/share/icons/hicolor/80x80/apps'] = ['khtsimpletext.png', ]
+    p['/usr/share/icons/hicolor/64x64/apps'] = ['khtsimpletext_64.png', ]
     p['/usr/share/icons/hicolor/scalable/apps'] = ['khtsimpletext.svg', ]
     p['/usr/share/applications'] = ['khtsimpletext.desktop', ]
     p["/opt"] = files
@@ -80,5 +85,7 @@ exit 0'''
     print p.generate(build_binary=True, build_src=True)
     if not os.path.exists('dists'):
         os.mkdir('dists')
-    for filepath in glob(p.name + '_' + p.version + '-' + p.buildversion + '*'):
-        os.rename(filepath, os.path.join(os.path.dirname(filepath), 'dists', os.path.basename(filepath))) 
+    for filepath in glob(p.name + '_' + p.version
+                         + '-' + p.buildversion + '*'):
+        os.rename(filepath, os.path.join(os.path.dirname(filepath),
+                  'dists', os.path.basename(filepath)))
