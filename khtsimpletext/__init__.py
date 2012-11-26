@@ -24,7 +24,7 @@ import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '2.1.3'
+__version__ = '2.2.0'
 __upgrade__ = '''0.4.1 :
  * Implement MarkDown preview
  * Syntax Highlighting (not in realtime due to qml limitation)
@@ -63,7 +63,9 @@ __upgrade__ = '''0.4.1 :
 2.1.2:
  * Add missing import of QGLFormat
 2.1.3:
- * Fix for Nemomobile/Mer to use real user path'''
+ * Fix for Nemomobile/Mer to use real user path
+2.2.0:
+ * Open by default the last opened folder'''
 
 
 class Settings(QObject):
@@ -76,6 +78,10 @@ class Settings(QObject):
             self._write_default()
         else:
             self.config.read(os.path.expanduser('~/.khtsimpletext.cfg'))
+        try:
+             self.config.add_section('General')
+        except:
+             pass
 
     def _write_default(self):
         ''' Write the default config'''
@@ -84,17 +90,39 @@ class Settings(QObject):
         self.config.set('Display', 'textwrap', 'True')
         self.config.set('Display', 'fontsize', '18')
         self.config.set('Display', 'fontfamily', 'Nokia Pure Text')
+        self.config.add_section('General')
+        self.config.set('General', 'lastopenedfolder', os.path.expanduser('~'))
+        self._write()
 
+    def _write(self):
         # Writing our configuration file to 'example.cfg'
         with open(os.path.expanduser('~/.khtsimpletext.cfg'),
                   'wb') as configfile:
             self.config.write(configfile)
 
+    @Slot(unicode, unicode, result=bool)
+    def set(self, option, value):
+        try:
+            if option in ('lastopenedfolder', ):
+                self.config.set('General', option, value)
+            else:
+                self.config.set('Display', option, value)
+            self._write()
+            return True
+        except Exception, err:
+            print err
+            return False
+
     @Slot(unicode, result=unicode)
     def get(self, option):
         try:
-            return self.config.get('Display', option)
+            if option in ('lastopenedfolder', ):
+                return self.config.get('General', option)
+            else:
+                return self.config.get('Display', option)
         except:
+            if option == 'lastopenedfolder':
+                return os.path.expanduser('~')
             return ''
 
     def _get_textWrap(self,):
@@ -143,14 +171,15 @@ class KhtSimpleText(QApplication):
             self.view.setViewport(self.glw)
 
         self.document = Document('~')
-        self.documentsModel = DocumentsModel(currentDoc=self.document)
+        self.settings = Settings()
+        self.documentsModel = DocumentsModel(currentDoc=self.document, settings=self.settings)
 
         self.rootContext = self.view.rootContext()
         self.rootContext.setContextProperty("argv", sys.argv)
         self.rootContext.setContextProperty("__version__", __version__)
         self.rootContext.setContextProperty("__upgrade__", __upgrade__
                                             .replace('\n', '<br>'))
-        self.rootContext.setContextProperty("Settings", Settings())
+        self.rootContext.setContextProperty("Settings", self.settings)
         self.rootContext.setContextProperty("DocumentsModel",
                                             self.documentsModel)
         self.rootContext.setContextProperty("Document",
@@ -161,4 +190,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())
+    sys.exit(KhtSimpleText().exec_())         

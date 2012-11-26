@@ -22,14 +22,17 @@ import os.path
 
 from document import Document
 
-
 class DocumentsModel(QAbstractListModel):
     COLUMNS = ('filename', 'index', 'data',
                'filepath', 'isdir', 'ready', 'document')
 
-    def __init__(self, currentDoc=None):
+    def __init__(self, currentDoc=None,
+                       settings=None):
         self._documents = {}
-        self._currentPath = os.path.expanduser('~/')
+        self.settings = settings
+        self._currentPath = settings.get('lastopenedfolder')
+        if not os.path.exists(self._currentPath):
+            self._currentPath = os.path.expanduser('~')
         QAbstractListModel.__init__(self)
         self.setRoleNames(dict(enumerate(DocumentsModel.COLUMNS)))
         self.currentDoc = currentDoc
@@ -149,9 +152,10 @@ class DocumentsModel(QAbstractListModel):
     def _set_currentpath(self, value):
         self._currentPath = os.path.realpath(value)
         self.onCurrentpathChanged.emit()
+        self.settings.set('lastopenedfolder', value)
         self.reload()
 
     onCurrentpathChanged = Signal()
 
     currentpath = Property(unicode, _get_currentpath,
-                           _set_currentpath, notify=onCurrentpathChanged)
+                           _set_currentpath, notify=onCurrentpathChanged)       
