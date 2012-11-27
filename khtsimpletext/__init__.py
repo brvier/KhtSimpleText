@@ -64,6 +64,8 @@ __upgrade__ = '''0.4.1 :
  * Add missing import of QGLFormat
 2.1.3:
  * Fix for Nemomobile/Mer to use real user path
+2.1.4:
+ * Add 64x64 icon for nemo mobile, clean make.py
 2.2.0:
  * Open by default the last opened folder'''
 
@@ -190,4 +192,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())         
+    sys.exit(KhtSimpleText().exec_())          
