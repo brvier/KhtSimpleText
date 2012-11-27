@@ -81,7 +81,7 @@ Page {
                  inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                  textFormat: TextEdit.AutoText
                  font { bold: false; family: Settings.fontFamily; pixelSize: Settings.fontSize;}
-                 onTextChanged: { modified = true; /*autoTimer.restart();*/ }
+                 onTextChanged: { opacity == 1.0 ? modified = true : modified = false;}
                  opacity: 1.0
          }
          /*Timer { //Too slow to be used
@@ -111,6 +111,7 @@ Page {
         visualParent: pageStack
         MenuLayout {
             MenuItem { text: qsTr("About"); onClicked: pushAbout()}
+            /*MenuItem { text: qsTr("Undo"); onClicked: textEditor.undo()}*/
             MenuItem { text: qsTr("MarkDown Preview"); onClicked: {
                 var atext = Document.previewMarkdown(textEditor.text);
                 var previewPage = Qt.createComponent(Qt.resolvedUrl("PreviewPage.qml"));

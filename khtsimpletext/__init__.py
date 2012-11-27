@@ -24,7 +24,7 @@ import ConfigParser
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '2.2.0'
+__version__ = '2.2.1'
 __upgrade__ = '''0.4.1 :
  * Implement MarkDown preview
  * Syntax Highlighting (not in realtime due to qml limitation)
@@ -67,7 +67,9 @@ __upgrade__ = '''0.4.1 :
 2.1.4:
  * Add 64x64 icon for nemo mobile, clean make.py
 2.2.0:
- * Open by default the last opened folder'''
+ * Open by default the last opened folder
+2.2.1:
+ * Fix unsaved dialog which appear when there is none modification'''
 
 
 class Settings(QObject):
@@ -81,9 +83,9 @@ class Settings(QObject):
         else:
             self.config.read(os.path.expanduser('~/.khtsimpletext.cfg'))
         try:
-             self.config.add_section('General')
+            self.config.add_section('General')
         except:
-             pass
+            pass
 
     def _write_default(self):
         ''' Write the default config'''
@@ -192,4 +194,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())          
+    sys.exit(KhtSimpleText().exec_())
