@@ -77,7 +77,6 @@ exit 0'''
 
     p['/usr/share/dbus-1/services'] = ['khtsimpletext.service', ]
     p['/usr/share/icons/hicolor/80x80/apps'] = ['khtsimpletext.png', ]
-    p['/usr/share/icons/hicolor/64x64/apps'] = ['khtsimpletext_64.png', ]
     p['/usr/share/icons/hicolor/scalable/apps'] = ['khtsimpletext.svg', ]
     p['/usr/share/applications'] = ['khtsimpletext.desktop', ]
     p["/opt"] = files
