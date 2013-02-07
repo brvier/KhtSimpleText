@@ -40,6 +40,7 @@ Page {
          id: header
          title: 'KhtSimpleText'
          subtitle: Common.beautifulPath(Document.filepath);
+         z: 1
     }
 
      BusyIndicator {
@@ -63,10 +64,12 @@ Page {
          anchors.bottom: parent.bottom
          anchors.bottomMargin: -2
          anchors.topMargin: -2
+         z:2
          clip: true
+       //  interactive: enabled
 
-         contentWidth: textEditor.width
-         contentHeight: textEditor.height
+         contentWidth: textEditor.width + 10
+         contentHeight: textEditor.height + 10
          pressDelay: 200
 
 
@@ -75,25 +78,61 @@ Page {
                  anchors.top: parent.top
                  anchors.left: parent.left
                  text: Document.data
-                 height: Math.max(paintedHeight + 28, flick.height)
-                 width: Math.max(paintedWidth + 28, flick.width)
-                 wrapMode: TextEdit.NoWrap
+                 //height: Math.max(paintedHeight + 28, flick.height)
+                 //width: Math.max(paintedWidth + 28, flick.width)
+                 //width: flick.width
+                 //platformMaxImplicitWidth: Settings.textWrap ? flick.width : -1
+                 wrapMode: Settings.textWrap ? TextEdit.WrapAnywhere : TextEdit.NoWrap;
                  inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
-                 textFormat: TextEdit.AutoText
+                 textFormat: Settings.syntaxHighlighting ? TextEdit.AutoText : TextEdit.PlainText;
                  font { bold: false; family: Settings.fontFamily; pixelSize: Settings.fontSize;}
-                 onTextChanged: { opacity == 1.0 ? modified = true : modified = false;}
+                 onTextChanged: { opacity == 1.0 ? modified = true : modified = false;autoTimer.start()}
                  opacity: 1.0
-         }
-         /*Timer { //Too slow to be used
+            }
+
+onActiveFocusChanged: {
+		   console.log('ActiveFocus');
+                   if ((textEditor.activeFocus) && (Settings.hideVKB) )
+                       
+			console.log('activeFocus and settings.hideVKB');
+			textEditor.closeSoftwareInputPanel();
+               }
+
+           Connections {
+            target: inputContext
+
+            onSoftwareInputPanelVisibleChanged: {
+                if ((activeFocus) && (Settings.hideVKB) )
+                    textEditor.closeSoftwareInputPanel();
+            }
+
+            onSoftwareInputPanelRectChanged: {
+                if ((activeFocus) && (Settings.hideVKB) )
+                    textEditor.closeSoftwareInputPanel();
+            }
+        }
+
+      
+         
+         Timer { //Too slow to be used for highlight
             id: autoTimer
-            interval: 10000
+            interval: 1000
             onTriggered:{
-                var index = textEditor.cursorPosition;
-                Document.recolorIt(textEditor.text);
-                textEditor.cursorPosition = index;
+                //var index = textEditor.cursorPosition;
+                //Document.recolorIt(textEditor.text);
+                //textEditor.cursorPosition = index;
+               if (Settings.textWrap) {
+               //    textEditor.height =  flick.height;
+                   //textEditor.wrapMode =  TextEdit.WrapAnywhere;
+                   width: flick.width
+               } else {
+                  textEditor.width = Math.max(textEditor.paintedWidth + 28, flick.width);
+               }
+               textEditor.height = Math.max(textEditor.paintedHeight + 28, flick.height);
+              
             } 
             
-         }*/
+         }
 
          
          onOpacityChanged: {

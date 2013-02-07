@@ -14,17 +14,17 @@
 ## GNU General Public License for more details.
 
 from PySide.QtGui import QApplication
-from PySide.QtCore import QUrl, Slot, QObject, Property, Signal
+from PySide.QtCore import QUrl, Slot, QObject, Property, Signal, QEvent
 from PySide import QtDeclarative
 from PySide.QtOpenGL import QGLWidget, QGLFormat
 import sys
 import os
 
-import ConfigParser
+from settings import Settings
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '2.2.1'
+__version__ = '2.3.0'
 __upgrade__ = '''0.4.1 :
  * Implement MarkDown preview
  * Syntax Highlighting (not in realtime due to qml limitation)
@@ -69,91 +69,34 @@ __upgrade__ = '''0.4.1 :
 2.2.0:
  * Open by default the last opened folder
 2.2.1:
- * Fix unsaved dialog which appear when there is none modification'''
-
-
-class Settings(QObject):
-    '''Config object'''
-
-    def __init__(self,):
-        QObject.__init__(self,)
-        self.config = ConfigParser.ConfigParser()
-        if not os.path.exists(os.path.expanduser('~/.khtsimpletext.cfg')):
-            self._write_default()
-        else:
-            self.config.read(os.path.expanduser('~/.khtsimpletext.cfg'))
-        try:
-            self.config.add_section('General')
-        except:
-            pass
-
-    def _write_default(self):
-        ''' Write the default config'''
-        self.config.add_section('Display')
-        self.config.set('Display', 'syntaxhighlighting', 'True')
-        self.config.set('Display', 'textwrap', 'True')
-        self.config.set('Display', 'fontsize', '18')
-        self.config.set('Display', 'fontfamily', 'Nokia Pure Text')
-        self.config.add_section('General')
-        self.config.set('General', 'lastopenedfolder', os.path.expanduser('~'))
-        self._write()
-
-    def _write(self):
-        # Writing our configuration file to 'example.cfg'
-        with open(os.path.expanduser('~/.khtsimpletext.cfg'),
-                  'wb') as configfile:
-            self.config.write(configfile)
-
-    @Slot(unicode, unicode, result=bool)
-    def set(self, option, value):
-        try:
-            if option in ('lastopenedfolder', ):
-                self.config.set('General', option, value)
-            else:
-                self.config.set('Display', option, value)
-            self._write()
-            return True
-        except Exception, err:
-            print err
-            return False
-
-    @Slot(unicode, result=unicode)
-    def get(self, option):
-        try:
-            if option in ('lastopenedfolder', ):
-                return self.config.get('General', option)
-            else:
-                return self.config.get('Display', option)
-        except:
-            if option == 'lastopenedfolder':
-                return os.path.expanduser('~')
-            return ''
-
-    def _get_textWrap(self,):
-        return (self.get('textwrap').lower() == 'true')
-
-    def _get_fontSize(self,):
-        return int(self.get('fontsize'))
-
-    def _get_fontFamily(self,):
-        return self.get('fontfamily')
-
-    def _get_syntaxHighlighting(self,):
-        return (self.get('syntaxhighlighting').lower() == 'true')
-
-    on_textWrap = Signal()
-    on_fontSize = Signal()
-    on_fontFamily = Signal()
-    on_syntaxHighlighting = Signal()
-    textWrap = Property(bool, _get_textWrap, notify=on_textWrap)
-    fontSize = Property(int, _get_fontSize, notify=on_fontSize)
-    fontFamily = Property(unicode, _get_fontFamily, notify=on_fontFamily)
-    syntaxHighlighting = Property(bool, _get_syntaxHighlighting,
-                                  notify=on_syntaxHighlighting)
+ * Fix unsaved dialog which appear when there is none modification
+2.3.0:
+ * Add an UI to the preference diablog
+ * Fix the word wrap in about page
+ * Add hide virtual keyboard preference
+   Upgrade pygments for newer lexers (qml highlighting)''' 
 
 from documentsModel import DocumentsModel
 from document import Document
 
+
+class FilteredDeclarativeView(QtDeclarative.QDeclarativeView):
+    def __init__(self, settings=None):
+        QtDeclarative.QDeclarativeView.__init__(self)
+        if settings:
+            self.settings = settings
+        else:
+            self.settings = Settings()
+
+    def event(self, event):
+        if ((event.type() == QEvent.RequestSoftwareInputPanel)
+                and (self.settings.hideVKB)):
+            #Hacky way to do, but event is already processed when
+            #python got the hand
+            closeEvent = QEvent(QEvent.CloseSoftwareInputPanel)
+            QApplication.instance().postEvent(self, closeEvent)
+            return True
+        return QtDeclarative.QDeclarativeView.event(self, event)
 
 class KhtSimpleText(QApplication):
     ''' Application class '''
@@ -163,7 +106,8 @@ class KhtSimpleText(QApplication):
         self.setOrganizationDomain("khertan.net")
         self.setApplicationName("KhtSimpleText")
 
-        self.view = QtDeclarative.QDeclarativeView()
+        self.settings = Settings()
+        self.view = FilteredDeclarativeView(self.settings)
 
         #Are we on mer ? So don't use opengl
         #As it didn't works on all devices
@@ -174,8 +118,7 @@ class KhtSimpleText(QApplication):
             self.glw.setAutoFillBackground(False)
             self.view.setViewport(self.glw)
 
-        self.document = Document('~')
-        self.settings = Settings()
+        self.document = Document('~', settings=self.settings)
         self.documentsModel = DocumentsModel(currentDoc=self.document, settings=self.settings)
 
         self.rootContext = self.view.rootContext()
@@ -189,9 +132,9 @@ class KhtSimpleText(QApplication):
         self.rootContext.setContextProperty("Document",
                                             self.document)
         self.view.setSource(QUrl.fromLocalFile(
-            os.path.join(os.path.dirname(__file__), 'qml',  'main.qml')))
+            os.path.join(os.path.dirname(__file__), 'qml', 'main.qml')))
         self.rootObject = self.view.rootObject()
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())
+    sys.exit(KhtSimpleText().exec_())      

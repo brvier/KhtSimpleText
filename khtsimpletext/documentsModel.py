@@ -31,6 +31,7 @@ class DocumentsModel(QAbstractListModel):
         self._documents = {}
         self.settings = settings
         self._currentPath = settings.get('lastopenedfolder')
+        print 'current Path :', self._currentPath
         if not os.path.exists(self._currentPath):
             self._currentPath = os.path.expanduser('~')
         QAbstractListModel.__init__(self)

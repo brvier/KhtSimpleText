@@ -23,7 +23,7 @@ Page {
 
             Item {
                 id: aboutContainer
-                width: aboutPage.width
+                width: aboutPage.width - 20
                 height: aboutColumn.height
 
                 Column {
@@ -66,7 +66,7 @@ Page {
                     Label {
                         id: content
                         text: ''
-                        width: aboutPage.width
+                        width: aboutContainer.width
                         wrapMode: Text.WordWrap                        
                     }
                 }

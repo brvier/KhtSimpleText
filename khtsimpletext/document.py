@@ -19,6 +19,7 @@ import threading
 import os
 import shutil
 from  markdown import markdown
+from settings import Settings
 import re
 import htmlentitydefs
 try:
@@ -45,7 +46,6 @@ def _stripTags(text):
         return plainText[1:]
     return plainText
 
-
 def _colorIt(text, filepath):
     ''' Syntax highlight a text in html'''
     try:
@@ -57,7 +57,6 @@ def _colorIt(text, filepath):
         return (text, None)
     except Exception, err:
         return (text, err)
-
 
 def _unescape(text):
     ''' Unescape a text '''
@@ -83,13 +82,17 @@ def _unescape(text):
 
 
 class Document(QObject):
-    def __init__(self, filepath):
+    def __init__(self, filepath, settings=None):
         QObject.__init__(self,)
         self._filename = os.path.basename(filepath)
         self._filepath = os.path.realpath(filepath)
         self._isdir = os.path.isdir(filepath)
         self._data = None
         self._ready = False
+        if not settings:
+            self.settings = Settings()
+        else:
+            self.settings = settings
 
     def _get_isdir(self,):
         return self._isdir
@@ -125,6 +128,7 @@ class Document(QObject):
 
     def _load(self, ):
         ''' Load the document from a path '''
+        #self.settings.reload()
         import codecs
         try:
             with codecs.open(self._filepath, 'r', 'utf_8') as fh:
@@ -132,9 +136,10 @@ class Document(QObject):
                     text = fh.read()
                     if text.find('\0') > 0:
                         text = text.decode('utf-16')
-                    text, err = _colorIt(text, self._filepath)
-                    if err:
-                        raise err
+                    if self.settings.syntaxHighlighting:
+                        text, err = _colorIt(text, self._filepath)
+                        if err:
+                            raise err
                     self._set_data(text)
                     self._set_ready(True)
                 except Exception, err:
@@ -151,11 +156,12 @@ class Document(QObject):
     @Slot(unicode, result=unicode)
     def recolorIt(self, text):
         ''' ReHighlight a text '''
-        text, err = _colorIt(_stripTags(text), self._filepath)
-        if not err:
-            self._set_data(text)
-        else:
-            self.onError.emit(unicode(err))
+        if self.settings.syntaxHighlighting:
+            text, err = _colorIt(_stripTags(text), self._filepath)
+            if not err:
+                self._set_data(text)
+            else:
+                self.onError.emit(unicode(err))
 
     @Slot(unicode, result=unicode)
     def previewMarkdown(self, text):
@@ -168,7 +174,8 @@ class Document(QObject):
     @Slot(unicode)
     def write(self, data):
         ''' Write the document to a file '''
-        data = _stripTags(data)
+        if self.settings.syntaxHighlighting:
+            data = _stripTags(data)
         try:
             with open(self.filepath, 'wb') as fh:
                 fh.write(data.encode('utf-8'))
@@ -231,4 +238,4 @@ class Document(QObject):
 
     onError = Signal(unicode)
     onReadyChanged = Signal()
-    ready = Property(bool, _get_ready, _set_ready, notify=onReadyChanged)
+    ready = Property(bool, _get_ready, _set_ready, notify=onReadyChanged)      

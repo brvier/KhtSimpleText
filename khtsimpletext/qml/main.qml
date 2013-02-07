@@ -66,11 +66,8 @@ PageStackWindow {
                        }
             }
             MenuItem { text: qsTr("Preferences"); onClicked: {
-                      var editingPage = Qt.createComponent(Qt.resolvedUrl("EditPage.qml"));
-                      Document.filepath = '/home/user/.khtsimpletext.cfg';
-                      Document.load();
-                      pageStack.push(editingPage, {index: -1, 
-                                                   modified: false}); 
+                      var settingsPage = Qt.createComponent(Qt.resolvedUrl("SettingsPage.qml"));
+                      pageStack.push(settingsPage); 
                     }
             }
         }
