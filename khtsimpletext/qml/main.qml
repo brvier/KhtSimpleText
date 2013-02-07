@@ -147,7 +147,7 @@ PageStackWindow {
                              '<br><br><b>Licenced under GPLv3</b>' +
                              '<br><br><b>Changelog :</b><br>' +
                              __upgrade__ +
-                             '<br>Report bugs on http://github.com/khertan/KhtSimpleText/Issues' 
+                             '<br><br><b>Report bugs on</b> http://github.com/khertan/KhtSimpleText/Issues' 
              }
              );
     }                
@@ -165,4 +165,4 @@ PageStackWindow {
                                  }       }
                   }
             ]
-}
+} 
