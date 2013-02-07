@@ -23,6 +23,7 @@ Page {
     
     function saveFile() {
         Document.write(textEditor.text);
+        modified = false;
     }
 
     QueryDialog {
@@ -187,4 +188,4 @@ onActiveFocusChanged: {
             onClicked: (editMenu.status === DialogStatus.Closed) ? editMenu.open() : editMenu.close()
         }
     }
-}    
+}     

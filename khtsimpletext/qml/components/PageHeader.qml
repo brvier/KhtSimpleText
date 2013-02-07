@@ -9,9 +9,11 @@ import com.nokia.meego 1.0
 
         anchors.top: parent.top
         width:parent.width
-        height:70
         color:'darkgrey'
         z:2
+        height:Settings.hideHeader ? 0 : 70
+        visible: Settings.hideHeader ? 0.0 : 1.0
+        opacity: visible
 
         Text{
             id:headerlabel
@@ -38,4 +40,4 @@ import com.nokia.meego 1.0
             color:"#cc6633"
             text:''
         }
-    }
+    } 
