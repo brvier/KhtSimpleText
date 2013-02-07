@@ -46,7 +46,7 @@ Page {
             }
 
             Label {
-                text: qsTr("Display Header")
+                text: qsTr("Hide Header")
                 width: parent.width
                 height: displayHeaderSwitch.height
                 verticalAlignment: Text.AlignVCenter
@@ -208,4 +208,4 @@ Page {
             onClicked: (editMenu.status === DialogStatus.Closed) ? editMenu.open() : editMenu.close()
         }
     }
-} 
+}  
