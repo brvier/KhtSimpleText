@@ -74,7 +74,7 @@ __upgrade__ = '''0.4.1 :
  * Add an UI to the preference diablog
  * Fix the word wrap in about page
  * Add hide virtual keyboard preference
-   Upgrade pygments for newer lexers (qml highlighting)''' 
+ *  Upgrade pygments for newer lexers (qml highlighting)''' 
 
 from documentsModel import DocumentsModel
 from document import Document
@@ -137,4 +137,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())      
+    sys.exit(KhtSimpleText().exec_())       

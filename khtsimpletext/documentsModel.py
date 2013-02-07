@@ -30,9 +30,9 @@ class DocumentsModel(QAbstractListModel):
                        settings=None):
         self._documents = {}
         self.settings = settings
-        self._currentPath = settings.get('lastopenedfolder')
-        print 'current Path :', self._currentPath
-        if not os.path.exists(self._currentPath):
+        self._currentPath = settings.lastOpenedFolder
+        if ((not os.path.exists(self._currentPath)) or 
+            (not settings.useLastOpenedFolder)):
             self._currentPath = os.path.expanduser('~')
         QAbstractListModel.__init__(self)
         self.setRoleNames(dict(enumerate(DocumentsModel.COLUMNS)))
@@ -159,4 +159,4 @@ class DocumentsModel(QAbstractListModel):
     onCurrentpathChanged = Signal()
 
     currentpath = Property(unicode, _get_currentpath,
-                           _set_currentpath, notify=onCurrentpathChanged)       
+                           _set_currentpath, notify=onCurrentpathChanged)        
