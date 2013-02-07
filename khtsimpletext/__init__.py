@@ -75,7 +75,8 @@ __upgrade__ = '''0.4.1 :
  * Fix the word wrap in about page
  * Add hide virtual keyboard preference
  * Upgrade pygments for newer lexers (qml highlighting)
- * Better icon'''
+ * Better icon
+ * Fix unsaved dialog appearing after a just saved file'''
 
 from documentsModel import DocumentsModel
 from document import Document
@@ -138,4 +139,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())        
+    sys.exit(KhtSimpleText().exec_())         
