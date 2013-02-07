@@ -223,7 +223,7 @@ FocusScope {
     
     property bool __hadFocusBeforeMinimization: false
     
-    implicitWidth: Math.max(platformStyle.defaultWidth, textEdit.width)
+    implicitWidth: Math.max(platformStyle.defaultWidth, textEdit.width + 36)
     implicitHeight: Math.max (UI.FIELD_DEFAULT_HEIGHT,
                               textEdit.height + (UI.FIELD_DEFAULT_HEIGHT - font.pixelSize))
 
@@ -622,4 +622,4 @@ FocusScope {
             root.parent.focus = true;
         }
     }
-}
+}    

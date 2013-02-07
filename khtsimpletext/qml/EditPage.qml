@@ -68,8 +68,8 @@ Page {
          clip: true
        //  interactive: enabled
 
-         contentWidth: textEditor.width + 10
-         contentHeight: textEditor.height + 10
+         contentWidth: textEditor.width + 4
+         contentHeight: textEditor.height + 4
          pressDelay: 200
 
 
@@ -126,7 +126,7 @@ onActiveFocusChanged: {
                    //textEditor.wrapMode =  TextEdit.WrapAnywhere;
                    width: flick.width
                } else {
-                  textEditor.width = Math.max(textEditor.paintedWidth + 28, flick.width);
+                  textEditor.width = Math.max(textEditor.paintedWidth + 8, flick.width);
                }
                textEditor.height = Math.max(textEditor.paintedHeight + 28, flick.height);
               
@@ -187,6 +187,4 @@ onActiveFocusChanged: {
             onClicked: (editMenu.status === DialogStatus.Closed) ? editMenu.open() : editMenu.close()
         }
     }
-}
-
-
+}    
