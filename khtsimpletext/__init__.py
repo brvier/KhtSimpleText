@@ -24,7 +24,7 @@ from settings import Settings
 
 __author__ = 'Benoit HERVIER (Khertan)'
 __email__ = 'khertan@khertan.net'
-__version__ = '2.3.0'
+__version__ = '2.4.0'
 __upgrade__ = '''0.4.1 :
  * Implement MarkDown preview
  * Syntax Highlighting (not in realtime due to qml limitation)
@@ -76,7 +76,9 @@ __upgrade__ = '''0.4.1 :
  * Add hide virtual keyboard preference
  * Upgrade pygments for newer lexers (qml highlighting)
  * Better icon
- * Fix unsaved dialog appearing after a just saved file'''
+ * Fix unsaved dialog appearing after a just saved file
+2.4.0:
+ * Fix initial size of text area on empty file'''
 
 from documentsModel import DocumentsModel
 from document import Document
@@ -139,4 +141,4 @@ class KhtSimpleText(QApplication):
         self.view.showFullScreen()
 
 if __name__ == '__main__':
-    sys.exit(KhtSimpleText().exec_())         
+    sys.exit(KhtSimpleText().exec_())           

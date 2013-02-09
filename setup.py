@@ -27,7 +27,7 @@ for fpath in glob.glob('*/plugins/*.py[c|o]'):
 for fpath in glob.glob('*/syntax/*.py[c|o]'):
     os.remove(fpath)
 
-
+ 
 setup(name='khtsimpletext',
       version=khtsimpletext.__version__,
       license='GNU GPLv3',
@@ -68,5 +68,4 @@ chmod +x /usr/local/bin/khtsimpletext_launch.py
       'requires':'python-pyside.qtdeclarative python-pyside.qtcore python-pyside.qtgui',
       'icon':'khtsimpletext.png',
       'group':'Development',}}
-     )
-
+     ) 

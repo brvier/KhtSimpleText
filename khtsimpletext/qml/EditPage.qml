@@ -79,8 +79,8 @@ Page {
                  anchors.top: parent.top
                  anchors.left: parent.left
                  text: Document.data
-                 //height: Math.max(paintedHeight + 28, flick.height)
-                 //width: Math.max(paintedWidth + 28, flick.width)
+                 height: Math.max(paintedHeight + 28, flick.height)
+                 width: Math.max(paintedWidth + 8, flick.width)
                  //width: flick.width
                  //platformMaxImplicitWidth: Settings.textWrap ? flick.width : -1
                  wrapMode: Settings.textWrap ? TextEdit.WrapAnywhere : TextEdit.NoWrap;
@@ -188,4 +188,4 @@ onActiveFocusChanged: {
             onClicked: (editMenu.status === DialogStatus.Closed) ? editMenu.open() : editMenu.close()
         }
     }
-}     
+}      
