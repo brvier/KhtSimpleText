@@ -35,7 +35,7 @@ Page {
             id: fileDelegate
             Rectangle {
                 width:parent.width
-                height: 80
+                height: Math.max(80, content.height)
                 anchors.leftMargin: 10
                 color:"white"
 
@@ -48,6 +48,7 @@ Page {
                 }
 
                 Column {
+                    id: content
                     spacing: 10
                     anchors.leftMargin:10
                     anchors.left: parent.left
@@ -127,4 +128,4 @@ Page {
          }
     }
 
-}
+} 
