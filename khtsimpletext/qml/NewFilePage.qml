@@ -43,7 +43,7 @@ Page {
             onClicked: {
                 var index = DocumentsModel.newFile(inputField.text);
                 if (index >= 0) {
-                    Document.filepath = DocumentsModel.currentpath + inputField.text;
+                    Document.filepath = DocumentsModel.currentpath + '/' + inputField.text;
                     Document.load();
                     replaceWithEdit(index);}
                 else {
@@ -53,4 +53,4 @@ Page {
             }
         }
     }
-}
+} 
