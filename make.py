@@ -19,6 +19,7 @@ from glob import glob
 
 import khtsimpletext
 import pypackager
+import datetime
 
 __build__ = '4'
 __author__ = "Benoît HERVIER (khertan)"
@@ -32,6 +33,8 @@ if __name__ == "__main__":
     p = pypackager.PyPackager("khtsimpletext")
     p.display_name = 'KhtSimpleText'
     p.version = khtsimpletext.__version__
+    if 'git' in sys.argv:
+        p.version += '+%sgit' % datetime.datetime.now().strftime('%Y%m%d')
     p.buildversion = __build__
     p.summary = 'A text editor'
     p.description = "A text editor for Harmattan devices (n950, n9)" \
